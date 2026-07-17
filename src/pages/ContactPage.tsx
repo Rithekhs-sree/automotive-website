@@ -2,7 +2,10 @@ import { motion } from 'framer-motion'
 import { MapPin, Phone, Mail, Clock, Send, Wrench } from 'lucide-react'
 
 export default function ContactPage() {
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLElement>, isLastField: boolean) => {
+  const handleKeyDown = (
+    e: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>,
+    isLastField: boolean
+  ) => {
     if (e.key === 'Enter' && !e.shiftKey && e.currentTarget.tagName !== 'SELECT') {
       e.preventDefault()
       if (isLastField) {

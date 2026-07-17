@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { Wrench, Users, Award, Clock, Heart, Target, ChevronRight, Star, CheckCircle, Sparkles, BookOpen, FileCheck, Battery, Droplet, Settings, Thermometer, MessageSquare, Calendar, Percent, Quote } from 'lucide-react'
+import { Award, Clock, Star, CheckCircle, Sparkles, BookOpen, FileCheck, Battery, Droplet, Settings, Thermometer, MessageSquare, Quote } from 'lucide-react'
 
 export default function AboutPage() {
   const services = [
