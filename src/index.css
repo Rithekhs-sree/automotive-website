@@ -1,0 +1,31 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply bg-gradient-to-br from-red-50 to-blue-50 text-gray-800 antialiased;
+  font-family: 'Poppins', sans-serif;
+}
+
+.hero-font {
+  font-family: 'Cormorant Garamond', 'Playfair Display', serif;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  line-height: 1.05;
+}
+
+.hero-title {
+  letter-spacing: 0.04em;
+}
+
+.text-gradient {
+  @apply bg-gradient-to-r from-red-500 to-blue-600 bg-clip-text text-transparent;
+}
+
+.bg-gradient-primary {
+  @apply bg-gradient-to-r from-red-500 to-blue-600;
+}
+
+.glass-effect {
+  @apply bg-white/70 backdrop-blur-lg border border-red-200 shadow-lg;
+}

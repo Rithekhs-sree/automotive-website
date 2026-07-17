@@ -1,0 +1,23 @@
+<svg viewBox="0 0 1200 600" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="carGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#0f172a" stop-opacity="0.9"/>
+      <stop offset="100%" stop-color="#1d4ed8" stop-opacity="0.9"/>
+    </linearGradient>
+    <radialGradient id="windowGlow" cx="50%" cy="25%" r="60%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.35" />
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="600" fill="transparent" />
+  <g transform="translate(100 180)">
+    <path d="M60 180 C 90 120, 180 90, 270 90 H 690 C 780 90, 870 120, 900 180 Q 930 260, 900 320 H 260 L 220 280 H 120 L 100 220 Q 80 200, 60 180 Z" fill="url(#carGradient)" opacity="0.98"/>
+    <path d="M250 120 C 320 90, 530 90, 600 120" stroke="#ffffff" stroke-width="10" fill="none" opacity="0.5"/>
+    <ellipse cx="260" cy="320" rx="60" ry="40" fill="#0f172a" opacity="0.95" />
+    <ellipse cx="760" cy="320" rx="60" ry="40" fill="#0f172a" opacity="0.95" />
+    <ellipse cx="260" cy="320" rx="28" ry="20" fill="#ffffff" opacity="0.25" />
+    <ellipse cx="760" cy="320" rx="28" ry="20" fill="#ffffff" opacity="0.25" />
+    <path d="M280 170 C 360 130, 520 130, 600 170" fill="url(#windowGlow)" opacity="0.7"/>
+    <path d="M140 180 Q 160 120, 260 100 H 520 Q 620 120, 640 180" stroke="#ffffff" stroke-width="8" fill="none" opacity="0.4"/>
+  </g>
+</svg>
