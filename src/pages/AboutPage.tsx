@@ -166,7 +166,7 @@ export default function AboutPage() {
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.8, delay: 0.3 }}
-                  className="text-5xl sm:text-6xl font-bold font-serif leading-[0.9]"
+                  className="text-4xl sm:text-5xl lg:text-6xl font-bold font-serif leading-[0.9]"
                 >
                   <span className="block">ABOUT</span>
                   <span className="block bg-gradient-to-r from-red-500 via-blue-400 to-red-500 bg-clip-text text-transparent">
@@ -180,7 +180,7 @@ export default function AboutPage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.5 }}
-                className="text-base text-blue-100 max-w-md leading-relaxed"
+                className="text-sm sm:text-base text-blue-100 max-w-md leading-relaxed"
               >
                 More than just mechanics – we're your automotive partners dedicated to keeping you safe on every journey.
               </motion.p>
@@ -190,12 +190,12 @@ export default function AboutPage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.7 }}
-                className="space-y-3"
+                className="space-y-2 sm:space-y-3"
               >
                 {['Certified Expert Mechanics', 'State-of-the-Art Equipment', 'Customer-First Approach'].map((item, i) => (
-                  <div key={i} className="flex items-center gap-3">
-                    <CheckCircle size={20} className="text-red-500 flex-shrink-0" />
-                    <span className="text-base text-blue-200">{item}</span>
+                  <div key={i} className="flex items-center gap-2 sm:gap-3">
+                    <CheckCircle size={20} className="w-4 h-4 sm:w-5 sm:h-5 text-red-500 flex-shrink-0" />
+                    <span className="text-sm sm:text-base text-blue-200">{item}</span>
                   </div>
                 ))}
               </motion.div>
@@ -209,45 +209,45 @@ export default function AboutPage() {
               className="relative"
             >
               {/* Stats cards - Dark themed for red background */}
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-2 gap-3 sm:gap-4">
                 <motion.div
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: 0.6 }}
-                  className="bg-slate-900 rounded-2xl p-6 shadow-xl border border-red-500/30"
+                  className="bg-slate-900 rounded-2xl p-4 sm:p-6 shadow-xl border border-red-500/30"
                 >
-                  <div className="text-3xl font-bold mb-2 text-red-400">15+</div>
-                  <div className="text-sm text-gray-300 font-medium">Years Experience</div>
+                  <div className="text-2xl sm:text-3xl font-bold mb-2 text-red-400">15+</div>
+                  <div className="text-xs sm:text-sm text-gray-300 font-medium">Years Experience</div>
                 </motion.div>
 
                 <motion.div
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: 0.7 }}
-                  className="bg-blue-950 rounded-2xl p-6 text-white shadow-xl border border-blue-700"
+                  className="bg-blue-950 rounded-2xl p-4 sm:p-6 text-white shadow-xl border border-blue-700"
                 >
-                  <div className="text-3xl font-bold mb-2 text-blue-400">5K+</div>
-                  <div className="text-sm text-gray-300">Happy Customers</div>
+                  <div className="text-2xl sm:text-3xl font-bold mb-2 text-blue-400">5K+</div>
+                  <div className="text-xs sm:text-sm text-gray-300">Happy Customers</div>
                 </motion.div>
 
                 <motion.div
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: 0.8 }}
-                  className="bg-slate-900 rounded-2xl p-6 shadow-xl border border-blue-500/30"
+                  className="bg-slate-900 rounded-2xl p-4 sm:p-6 shadow-xl border border-blue-500/30"
                 >
-                  <div className="text-3xl font-bold mb-2 text-blue-400">100%</div>
-                  <div className="text-sm text-gray-300 font-medium">Satisfaction Rate</div>
+                  <div className="text-2xl sm:text-3xl font-bold mb-2 text-blue-400">100%</div>
+                  <div className="text-xs sm:text-sm text-gray-300 font-medium">Satisfaction Rate</div>
                 </motion.div>
 
                 <motion.div
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: 0.9 }}
-                  className="bg-blue-950 rounded-2xl p-6 text-white shadow-xl border border-red-500/30"
+                  className="bg-blue-950 rounded-2xl p-4 sm:p-6 text-white shadow-xl border border-red-500/30"
                 >
-                  <div className="text-3xl font-bold mb-2 text-red-400">50+</div>
-                  <div className="text-sm text-gray-300">Expert Team</div>
+                  <div className="text-2xl sm:text-3xl font-bold mb-2 text-red-400">50+</div>
+                  <div className="text-xs sm:text-sm text-gray-300">Expert Team</div>
                 </motion.div>
               </div>
 
@@ -287,7 +287,7 @@ export default function AboutPage() {
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, ease: 'easeOut' }}
             viewport={{ once: true, amount: 0.3 }}
-            className="text-4xl font-bold mb-10 bg-gradient-to-r from-red-500 via-blue-400 to-red-500 bg-clip-text text-transparent font-serif text-center"
+            className="text-3xl sm:text-4xl font-bold mb-8 sm:mb-10 bg-gradient-to-r from-red-500 via-blue-400 to-red-500 bg-clip-text text-transparent font-serif text-center"
           >
             Our Story
           </motion.h2>
@@ -298,7 +298,7 @@ export default function AboutPage() {
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, ease: 'easeOut' }}
             viewport={{ once: true, amount: 0.3 }}
-            className="text-base mb-6 leading-relaxed text-center text-blue-100"
+            className="text-sm sm:text-base mb-4 sm:mb-6 leading-relaxed text-center text-blue-100"
           >
             At C & S Automotive Service & Repairs, we believe quality automotive care starts with honesty, reliability, and attention to detail.
           </motion.p>
@@ -309,7 +309,7 @@ export default function AboutPage() {
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, ease: 'easeOut', delay: 0.1 }}
             viewport={{ once: true, amount: 0.3 }}
-            className="text-base mb-6 leading-relaxed text-center text-blue-200"
+            className="text-sm sm:text-base mb-4 sm:mb-6 leading-relaxed text-center text-blue-200"
           >
             Based in Wentworthville, we provide professional servicing, diagnostics, mechanical repairs, and preventative maintenance for a wide range of vehicles. Our focus is on delivering dependable workmanship, transparent pricing, and personalised customer service that gives every driver confidence on the road.
           </motion.p>
@@ -320,7 +320,7 @@ export default function AboutPage() {
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, ease: 'easeOut', delay: 0.2 }}
             viewport={{ once: true, amount: 0.3 }}
-            className="text-base mb-6 leading-relaxed text-center text-blue-200"
+            className="text-sm sm:text-base mb-4 sm:mb-6 leading-relaxed text-center text-blue-200"
           >
             From the moment you arrive, we'll take the time to explain any recommended work, answer your questions, and ensure you're informed before any repairs begin. No hidden costs, no unnecessary repairs—just professional automotive care you can trust.
           </motion.p>
@@ -331,7 +331,7 @@ export default function AboutPage() {
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, ease: 'easeOut', delay: 0.3 }}
             viewport={{ once: true, amount: 0.3 }}
-            className="text-base leading-relaxed text-center text-blue-200"
+            className="text-sm sm:text-base leading-relaxed text-center text-blue-200"
           >
             Whether you need a routine service or more complex mechanical repairs, our team is committed to keeping your vehicle performing safely and efficiently.
           </motion.p>
@@ -346,9 +346,9 @@ export default function AboutPage() {
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-center mb-16"
+            className="text-center mb-12 sm:mb-16"
           >
-            <h2 className="text-4xl font-bold text-white font-serif mb-4">
+            <h2 className="text-3xl sm:text-4xl font-bold text-white font-serif mb-4">
               Our Services
             </h2>
             <div className="w-24 h-1 bg-gradient-to-r from-red-500 to-blue-600 mx-auto rounded-full" />
@@ -370,18 +370,18 @@ export default function AboutPage() {
                   className={`flex items-center ${isEven ? 'justify-start' : 'justify-end'}`}
                 >
                   <div className={`max-w-2xl w-full bg-gradient-to-br from-blue-950 to-slate-900 rounded-2xl border border-blue-800 backdrop-blur-sm overflow-hidden hover:border-red-500/50 transition-all duration-300 ${isEven ? '' : 'ml-auto'}`}>
-                    <div className="flex items-stretch">
+                    <div className="flex items-stretch flex-col sm:flex-row">
                       {/* Icon Section - Red */}
-                      <div className="bg-gradient-to-br from-red-600 to-red-800 p-8 flex items-center justify-center flex-shrink-0">
-                        <Icon size={48} className="text-white" strokeWidth={1.5} />
+                      <div className="bg-gradient-to-br from-red-600 to-red-800 p-6 sm:p-8 flex items-center justify-center flex-shrink-0">
+                        <Icon size={48} className="w-9 h-9 sm:w-12 sm:h-12 text-white" strokeWidth={1.5} />
                       </div>
                       
                       {/* Content Section */}
-                      <div className="p-8 flex-1">
-                        <h3 className="text-2xl font-bold text-white mb-3">
+                      <div className="p-6 sm:p-8 flex-1">
+                        <h3 className="text-xl sm:text-2xl font-bold text-white mb-3">
                           {service.title}
                         </h3>
-                        <p className="text-base text-blue-200 leading-relaxed">
+                        <p className="text-sm sm:text-base text-blue-200 leading-relaxed">
                           {service.description}
                         </p>
                       </div>
@@ -402,9 +402,9 @@ export default function AboutPage() {
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-center mb-16"
+            className="text-center mb-12 sm:mb-16"
           >
-            <h2 className="text-4xl font-bold bg-gradient-to-r from-red-500 via-blue-400 to-red-500 bg-clip-text text-transparent font-serif mb-4">
+            <h2 className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-red-500 via-blue-400 to-red-500 bg-clip-text text-transparent font-serif mb-4">
               Why Choose Us?
             </h2>
             <div className="w-24 h-1 bg-gradient-to-r from-red-500 to-blue-600 mx-auto rounded-full" />
@@ -437,18 +437,18 @@ export default function AboutPage() {
                   <div className="absolute bottom-0 left-0 right-0 h-1.5 bg-gradient-to-r from-red-600 to-red-800" />
                   
                   {/* Icon at top center */}
-                  <div className="flex justify-center mb-6">
-                    <div className="w-20 h-20 bg-gradient-to-br from-red-600 to-red-700 rounded-2xl flex items-center justify-center shadow-lg">
-                      <Icon size={40} className="text-white" strokeWidth={1.5} />
+                  <div className="flex justify-center mb-4 sm:mb-6">
+                    <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-red-600 to-red-700 rounded-2xl flex items-center justify-center shadow-lg">
+                      <Icon size={40} className="w-8 h-8 sm:w-10 sm:h-10 text-white" strokeWidth={1.5} />
                     </div>
                   </div>
                   
                   {/* Content */}
                   <div className="text-center">
-                    <h3 className="text-2xl font-bold text-white mb-4">
+                    <h3 className="text-xl sm:text-2xl font-bold text-white mb-3 sm:mb-4">
                       {item.title}
                     </h3>
-                    <p className="text-base text-blue-300 leading-relaxed">
+                    <p className="text-sm sm:text-base text-blue-300 leading-relaxed">
                       {item.description}
                     </p>
                   </div>
@@ -467,12 +467,12 @@ export default function AboutPage() {
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-center mb-16"
+            className="text-center mb-12 sm:mb-16"
           >
-            <h2 className="text-4xl font-bold text-white font-serif mb-4">
+            <h2 className="text-3xl sm:text-4xl font-bold text-white font-serif mb-4">
               What Our Clients Say
             </h2>
-            <p className="text-base text-blue-200 max-w-2xl mx-auto">
+            <p className="text-sm sm:text-base text-blue-200 max-w-2xl mx-auto">
               Don't just take our word for it. Here's what our valued customers have to say about their experience with C & S Automotive Service & Repairs.
             </p>
           </motion.div>
@@ -504,26 +504,26 @@ export default function AboutPage() {
                 <Quote size={28} className="text-red-500/50 mb-4" />
 
                 {/* Testimonial Text */}
-                <p className="text-base text-blue-100 leading-relaxed mb-6">
+                <p className="text-sm sm:text-base text-blue-100 leading-relaxed mb-4 sm:mb-6">
                   {testimonial.text}
                 </p>
 
                 {/* Customer Info */}
-                <div className="flex items-center justify-between pt-4 border-t border-blue-800">
-                  <div className="flex items-center gap-3">
+                <div className="flex items-center justify-between pt-3 sm:pt-4 border-t border-blue-800">
+                  <div className="flex items-center gap-2 sm:gap-3">
                     <img
                       src={testimonial.avatar}
                       alt={testimonial.name}
-                      className="w-10 h-10 rounded-full border-2 border-blue-500"
+                      className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border-2 border-blue-500"
                     />
                     <div>
-                      <h4 className="text-white font-semibold text-sm">{testimonial.name}</h4>
-                      <p className="text-gray-500 text-xs">{testimonial.date}</p>
+                      <h4 className="text-white font-semibold text-xs sm:text-sm">{testimonial.name}</h4>
+                      <p className="text-gray-500 text-[10px] sm:text-xs">{testimonial.date}</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-1 text-red-400">
-                    <span className="text-sm font-bold">99</span>
-                    <span className="text-xs">pts</span>
+                    <span className="text-xs sm:text-sm font-bold">99</span>
+                    <span className="text-[10px] sm:text-xs">pts</span>
                   </div>
                 </div>
               </motion.div>

@@ -202,7 +202,7 @@ export default function HomePage() {
               </motion.div>
 
               {/* Main heading */}
-              <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold leading-[1.05] tracking-tight font-serif">
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold leading-[1.1] sm:leading-[1.05] tracking-tight font-serif">
                 <span className="block bg-gradient-to-r from-red-500 via-blue-400 to-red-500 bg-clip-text text-transparent">
                   Reliable automotive
                 </span>
@@ -212,30 +212,30 @@ export default function HomePage() {
               </h1>
 
               {/* Description */}
-              <p className="text-blue-100 text-base leading-relaxed max-w-md">
+              <p className="text-blue-100 text-sm sm:text-base leading-relaxed max-w-md">
                 From log book servicing to air conditioning and electrical repairs, we deliver expert workmanship with honest advice and fast turnaround.
               </p>
 
               {/* Buttons */}
-              <div className="flex flex-wrap gap-5 pt-3">
+              <div className="flex flex-wrap gap-4 sm:gap-5 pt-3">
                 <Link
                   to="/services"
-                  className="group inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-red-600 to-blue-600 px-9 py-4 font-semibold text-white shadow-lg shadow-red-500/30 hover:shadow-xl hover:shadow-blue-500/40 transition-all hover:scale-105"
+                  className="group inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-red-600 to-blue-600 px-6 sm:px-9 py-3 sm:py-4 text-sm sm:text-base font-semibold text-white shadow-lg shadow-red-500/30 hover:shadow-xl hover:shadow-blue-500/40 transition-all hover:scale-105"
                 >
                   Explore Services
                   <motion.span
                     animate={{ x: [0, 4, 0] }}
                     transition={{ duration: 1.5, repeat: Infinity }}
                   >
-                    <ArrowRight size={20} />
+                    <ArrowRight size={20} className="w-4 h-4 sm:w-5 sm:h-5" />
                   </motion.span>
                 </Link>
                 <Link
                   to="/contact"
-                  className="inline-flex items-center gap-2 rounded-full border-2 border-blue-500 bg-transparent px-9 py-4 font-semibold text-blue-300 hover:bg-blue-600 hover:text-white transition-all"
+                  className="inline-flex items-center gap-2 rounded-full border-2 border-blue-500 bg-transparent px-6 sm:px-9 py-3 sm:py-4 text-sm sm:text-base font-semibold text-blue-300 hover:bg-blue-600 hover:text-white transition-all"
                 >
                   Book a Visit
-                  <ChevronRight size={18} />
+                  <ChevronRight size={18} className="w-4 h-4 sm:w-[18px] sm:h-[18px]" />
                 </Link>
               </div>
             </motion.div>
@@ -408,12 +408,12 @@ export default function HomePage() {
             <div className="w-24 h-1 bg-gradient-to-r from-red-500 to-blue-600 mx-auto rounded-full" />
           </motion.div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-10 max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-6 sm:gap-10 max-w-6xl mx-auto">
             {services.map((service, index) => {
               const Icon = service.icon
               let colStartClass = ""
-              if (index === 3) colStartClass = "lg:col-start-2"
-              if (index === 4) colStartClass = "lg:col-start-4"
+              if (index === 3) colStartClass = "xl:col-start-2"
+              if (index === 4) colStartClass = "xl:col-start-4"
 
               return (
                 <motion.div
@@ -423,7 +423,7 @@ export default function HomePage() {
                   transition={{ duration: 0.6, delay: index * 0.1, ease: 'easeOut' }}
                   viewport={{ once: true }}
                   whileHover={{ scale: 1.08, rotate: 0, y: -12, transition: { duration: 0.3 } }}
-                  className={`relative lg:col-span-2 ${colStartClass} rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 cursor-pointer group ${service.rotation} overflow-hidden border border-blue-800 bg-gradient-to-br from-blue-950 to-slate-900`}
+                  className={`relative lg:col-span-1 xl:col-span-2 ${colStartClass} rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 cursor-pointer group ${service.rotation} overflow-hidden border border-blue-800 bg-gradient-to-br from-blue-950 to-slate-900`}
                   style={{ boxShadow: '0 15px 40px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.05)' }}
                 >
                   <Link to={`/services${service.hash}`} className="block h-full relative">
@@ -442,11 +442,11 @@ export default function HomePage() {
                       style={{ backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 28px, rgba(255,255,255,0.03) 29px)' }}
                     />
 
-                    <div className="relative z-10 flex flex-col items-center justify-center text-center min-h-[280px] px-8 py-12">
-                      <div className="mb-6 p-5 rounded-full bg-blue-900/50 group-hover:bg-blue-800/50 transition-colors shadow-md border border-blue-700">
-                        <Icon size={48} className="text-blue-200" />
+                    <div className="relative z-10 flex flex-col items-center justify-center text-center min-h-[220px] sm:min-h-[280px] px-6 sm:px-8 py-8 sm:py-12">
+                      <div className="mb-4 sm:mb-6 p-4 sm:p-5 rounded-full bg-blue-900/50 group-hover:bg-blue-800/50 transition-colors shadow-md border border-blue-700">
+                        <Icon size={48} className="w-9 h-9 sm:w-12 sm:h-12 text-blue-200" />
                       </div>
-                      <h3 className="text-2xl font-bold text-white leading-tight">
+                      <h3 className="text-xl sm:text-2xl font-bold text-white leading-tight">
                         {service.title}
                       </h3>
                     </div>
@@ -507,8 +507,8 @@ export default function HomePage() {
                 <div className="w-[250px] h-[250px] md:w-[400px] md:h-[400px] rounded-full border-2 border-red-600/30" />
               </div>
 
-              <div className="relative z-10 grid grid-cols-1 lg:grid-cols-[1fr_auto_1fr] gap-8 lg:gap-12 items-center">
-                <div className="space-y-6">
+              <div className="relative z-10 grid grid-cols-1 lg:grid-cols-[1fr_auto_1fr] gap-6 lg:gap-12 items-center">
+                <div className="space-y-4 sm:space-y-6">
                   {whyChooseItems.slice(0, 3).map((item, index) => {
                     const Icon = item.icon
                     return (
@@ -519,18 +519,18 @@ export default function HomePage() {
                         transition={{ duration: 0.6, delay: index * 0.15 }}
                         viewport={{ once: true }}
                         whileHover={{ scale: 1.05, x: 10 }}
-                        className={`relative bg-blue-900 rounded-2xl p-5 md:p-6 shadow-lg hover:shadow-xl transition-all duration-300 border border-blue-700 ${item.rotation} max-w-sm`}
+                        className={`relative bg-blue-900 rounded-2xl p-4 sm:p-5 md:p-6 shadow-lg hover:shadow-xl transition-all duration-300 border border-blue-700 ${item.rotation} max-w-sm mx-auto lg:mx-0`}
                         style={{ boxShadow: '0 10px 30px rgba(0,0,0,0.5)' }}
                       >
-                        <div className="flex items-center gap-4">
-                          <div className="flex-shrink-0 w-14 h-14 rounded-xl bg-gradient-to-br from-red-600 to-red-700 flex items-center justify-center shadow-lg">
-                            <Icon size={28} className="text-white" />
+                        <div className="flex items-center gap-3 sm:gap-4">
+                          <div className="flex-shrink-0 w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-gradient-to-br from-red-600 to-red-700 flex items-center justify-center shadow-lg">
+                            <Icon size={28} className="w-6 h-6 sm:w-7 sm:h-7 text-white" />
                           </div>
                           <div className="flex-1 min-w-0">
-                            <h3 className="text-lg font-bold text-white leading-tight">
+                            <h3 className="text-base sm:text-lg font-bold text-white leading-tight">
                               {item.title}
                             </h3>
-                            <p className="text-sm text-blue-300 mt-1">
+                            <p className="text-xs sm:text-sm text-blue-300 mt-1">
                               {item.subtitle}
                             </p>
                           </div>
@@ -540,20 +540,20 @@ export default function HomePage() {
                   })}
                 </div>
 
-                <div className="flex items-center justify-center">
+                <div className="flex items-center justify-center order-first lg:order-none mb-8 lg:mb-0">
                   <motion.div
                     animate={{ scale: [1, 1.08, 1] }}
                     transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
                     className="relative"
                   >
-                    <div className="w-28 h-28 md:w-36 md:h-36 rounded-full bg-gradient-to-br from-red-600 via-red-500 to-red-700 flex items-center justify-center shadow-2xl shadow-red-600/50">
-                      <Wrench size={56} className="text-white md:w-14 md:h-14" strokeWidth={2.5} />
+                    <div className="w-24 h-24 sm:w-28 sm:h-28 md:w-36 md:h-36 rounded-full bg-gradient-to-br from-red-600 via-red-500 to-red-700 flex items-center justify-center shadow-2xl shadow-red-600/50">
+                      <Wrench size={56} className="w-12 h-12 sm:w-14 sm:h-14 md:w-14 md:h-14 text-white" strokeWidth={2.5} />
                     </div>
                     <div className="absolute inset-0 rounded-full bg-gradient-to-br from-white/30 to-transparent" />
                   </motion.div>
                 </div>
 
-                <div className="space-y-6">
+                <div className="space-y-4 sm:space-y-6">
                   {whyChooseItems.slice(3, 6).map((item, index) => {
                     const Icon = item.icon
                     return (
@@ -564,18 +564,18 @@ export default function HomePage() {
                         transition={{ duration: 0.6, delay: (index + 3) * 0.15 }}
                         viewport={{ once: true }}
                         whileHover={{ scale: 1.05, x: -10 }}
-                        className={`relative bg-blue-900 rounded-2xl p-5 md:p-6 shadow-lg hover:shadow-xl transition-all duration-300 border border-blue-700 ${item.rotation} max-w-sm`}
+                        className={`relative bg-blue-900 rounded-2xl p-4 sm:p-5 md:p-6 shadow-lg hover:shadow-xl transition-all duration-300 border border-blue-700 ${item.rotation} max-w-sm mx-auto lg:mx-0`}
                         style={{ boxShadow: '0 10px 30px rgba(0,0,0,0.5)' }}
                       >
-                        <div className="flex items-center gap-4">
-                          <div className="flex-shrink-0 w-14 h-14 rounded-xl bg-gradient-to-br from-red-600 to-red-700 flex items-center justify-center shadow-lg">
-                            <Icon size={28} className="text-white" />
+                        <div className="flex items-center gap-3 sm:gap-4">
+                          <div className="flex-shrink-0 w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-gradient-to-br from-red-600 to-red-700 flex items-center justify-center shadow-lg">
+                            <Icon size={28} className="w-6 h-6 sm:w-7 sm:h-7 text-white" />
                           </div>
                           <div className="flex-1 min-w-0">
-                            <h3 className="text-lg font-bold text-white leading-tight">
+                            <h3 className="text-base sm:text-lg font-bold text-white leading-tight">
                               {item.title}
                             </h3>
-                            <p className="text-sm text-blue-300 mt-1">
+                            <p className="text-xs sm:text-sm text-blue-300 mt-1">
                               {item.subtitle}
                             </p>
                           </div>
@@ -600,7 +600,7 @@ export default function HomePage() {
             viewport={{ once: true }}
             className="relative bg-gradient-to-br from-blue-950 to-slate-900 rounded-3xl shadow-2xl overflow-hidden border border-blue-800"
           >
-            <div className="grid lg:grid-cols-2 min-h-[600px]">
+            <div className="grid lg:grid-cols-2 min-h-[500px] lg:min-h-[600px]">
               
               {/* LEFT SIDE - Dark Blue with Car Image */}
               <motion.div
@@ -608,16 +608,16 @@ export default function HomePage() {
                 whileInView={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.8, ease: 'easeOut' }}
                 viewport={{ once: true }}
-                className="relative bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900 p-8 md:p-12 flex flex-col justify-center items-center overflow-hidden"
+                className="relative bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900 p-6 sm:p-8 md:p-12 flex flex-col justify-center items-center overflow-hidden order-2 lg:order-1"
               >
                 <div className="absolute top-0 right-0 w-64 h-64 bg-blue-600/10 rounded-full blur-3xl" />
                 <div className="absolute bottom-0 left-0 w-48 h-48 bg-red-600/10 rounded-full blur-3xl" />
                 
-                <div className="relative z-10 mb-8">
+                <div className="relative z-10 mb-6 sm:mb-8">
                   <motion.img
                     src="/Audi.jpeg"
                     alt="Audi"
-                    className="w-full max-w-md h-auto object-contain drop-shadow-2xl"
+                    className="w-full max-w-sm sm:max-w-md h-auto object-contain drop-shadow-2xl"
                     initial={{ scale: 0.8, opacity: 0 }}
                     whileInView={{ scale: 1, opacity: 1 }}
                     transition={{ duration: 1, delay: 0.3 }}
@@ -632,22 +632,22 @@ export default function HomePage() {
                   viewport={{ once: true }}
                   className="relative z-10 text-center"
                 >
-                  <div className="inline-block bg-blue-900/50 backdrop-blur-sm px-6 py-2 rounded-full mb-4 border border-blue-700">
-                    <span className="text-blue-300 text-sm font-semibold uppercase tracking-wider">Our Commitment</span>
+                  <div className="inline-block bg-blue-900/50 backdrop-blur-sm px-4 sm:px-6 py-2 rounded-full mb-4 border border-blue-700">
+                    <span className="text-blue-300 text-xs sm:text-sm font-semibold uppercase tracking-wider">Our Commitment</span>
                   </div>
-                  <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight">
+                  <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight">
                     WARRANTY
                     <br />
                     STATEMENT
                   </h2>
-                  <div className="mt-4 w-24 h-1 bg-gradient-to-r from-red-500 to-blue-500 mx-auto rounded-full" />
+                  <div className="mt-4 w-20 sm:w-24 h-1 bg-gradient-to-r from-red-500 to-blue-500 mx-auto rounded-full" />
                 </motion.div>
               </motion.div>
 
               {/* RIGHT SIDE */}
-              <div className="relative flex flex-col overflow-hidden">
-                <div className="flex-1 bg-slate-900 p-8 md:p-12 lg:p-16 flex flex-col justify-center">
-                  <div className="space-y-6">
+              <div className="relative flex flex-col overflow-hidden order-1 lg:order-2">
+                <div className="flex-1 bg-slate-900 p-6 sm:p-8 md:p-12 lg:p-16 flex flex-col justify-center">
+                  <div className="space-y-4 sm:space-y-6">
                     {warrantyParagraphs.map((paragraph, index) => (
                       <motion.p
                         key={index}
@@ -655,7 +655,7 @@ export default function HomePage() {
                         whileInView={{ opacity: 1, x: 0 }}
                         transition={{ duration: 0.7, delay: 0.3 + index * 0.2, ease: 'easeOut' }}
                         viewport={{ once: true }}
-                        className="text-blue-100 leading-relaxed text-base md:text-lg"
+                        className="text-blue-100 leading-relaxed text-sm sm:text-base md:text-lg"
                       >
                         {paragraph}
                       </motion.p>
@@ -663,15 +663,15 @@ export default function HomePage() {
                   </div>
                 </div>
 
-                <div className="flex-1 bg-gradient-to-br from-blue-900 via-blue-950 to-slate-900 p-8 md:p-12 lg:p-16 flex items-center justify-center relative overflow-hidden">
+                <div className="flex-1 bg-gradient-to-br from-blue-900 via-blue-950 to-slate-900 p-6 sm:p-8 md:p-12 lg:p-16 flex items-center justify-center relative overflow-hidden">
                   <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                    <div className="w-[400px] h-[400px] md:w-[500px] md:h-[500px] rounded-full bg-gradient-to-br from-yellow-400/10 via-red-500/10 to-blue-500/10 blur-3xl" />
+                    <div className="w-[300px] h-[300px] sm:w-[400px] sm:h-[400px] md:w-[500px] md:h-[500px] rounded-full bg-gradient-to-br from-yellow-400/10 via-red-500/10 to-blue-500/10 blur-3xl" />
                   </div>
 
                   <motion.div
                     animate={{ rotate: 360 }}
                     transition={{ duration: 30, repeat: Infinity, ease: 'linear' }}
-                    className="absolute w-[320px] h-[320px] md:w-[420px] md:h-[420px] rounded-full border-2 border-dashed border-yellow-400/10 pointer-events-none"
+                    className="absolute w-[250px] h-[250px] sm:w-[320px] sm:h-[320px] md:w-[420px] md:h-[420px] rounded-full border-2 border-dashed border-yellow-400/10 pointer-events-none"
                   />
 
                   <motion.div

@@ -189,7 +189,7 @@ export default function GalleryPage() {
           </motion.div>
 
           {/* Carousel Container */}
-          <div className="relative h-[650px] flex items-center justify-center">
+          <div className="relative h-[400px] sm:h-[500px] md:h-[600px] lg:h-[650px] flex items-center justify-center">
             <AnimatePresence>
               {galleryImages.map((imageSrc, index) => {
                 let position = index - currentIndex
@@ -199,30 +199,41 @@ export default function GalleryPage() {
                 const isCenter = position === 0
                 const absPosition = Math.abs(position)
                 
+                // Mobile: show only center image, Desktop: show carousel
+                const isMobile = window.innerWidth < 768
+                const shouldShow = isMobile ? isCenter : true
+                
+                if (!shouldShow) return null
+                
+                // Responsive sizing
+                const cardWidth = isMobile ? '85vw' : '420px'
+                const cardHeight = isMobile ? '50vh' : '600px'
+                const xOffset = isMobile ? 0 : position * 300
+                
                 return (
                   <motion.div
                     key={index}
                     initial={{ opacity: 0 }}
                     animate={{
-                      opacity: isCenter ? 1 : Math.max(0.2, 1 - absPosition * 0.25),
-                      x: position * 300,
+                      opacity: isMobile ? (isCenter ? 1 : 0) : (isCenter ? 1 : Math.max(0.2, 1 - absPosition * 0.25)),
+                      x: xOffset,
                       z: isCenter ? 50 : 50 - absPosition * 10,
-                      scale: isCenter ? 1 : Math.max(0.7, 1 - absPosition * 0.1),
-                      rotateY: position * 15,
+                      scale: isMobile ? (isCenter ? 1 : 0.8) : (isCenter ? 1 : Math.max(0.7, 1 - absPosition * 0.1)),
+                      rotateY: isMobile ? 0 : position * 15,
                     }}
                     exit={{ opacity: 0 }}
                     transition={{ duration: 0.5, ease: "easeInOut" }}
                     className="absolute"
                     style={{
                       transformStyle: "preserve-3d",
-                      filter: isCenter ? 'none' : `blur(${absPosition * 2}px)`,
+                      filter: isMobile ? (isCenter ? 'none' : 'blur(8px)') : (isCenter ? 'none' : `blur(${absPosition * 2}px)`),
                     }}
                   >
                     <div 
                       className={`relative overflow-hidden rounded-2xl shadow-2xl ${isCenter ? 'border-2 border-blue-500/50' : 'border border-slate-700'}`}
                       style={{
-                        width: '420px',
-                        height: '600px',
+                        width: cardWidth,
+                        height: cardHeight,
                       }}
                     >
                       {/* Image */}
@@ -240,8 +251,8 @@ export default function GalleryPage() {
                       {/* Corner Accents for Center Card */}
                       {isCenter && (
                         <>
-                          <div className="absolute top-0 left-0 w-12 h-12 border-t-2 border-l-2 border-blue-500 rounded-tl-lg" />
-                          <div className="absolute bottom-0 right-0 w-12 h-12 border-b-2 border-r-2 border-red-500 rounded-br-lg" />
+                          <div className="absolute top-0 left-0 w-8 h-8 sm:w-12 sm:h-12 border-t-2 border-l-2 border-blue-500 rounded-tl-lg" />
+                          <div className="absolute bottom-0 right-0 w-8 h-8 sm:w-12 sm:h-12 border-b-2 border-r-2 border-red-500 rounded-br-lg" />
                         </>
                       )}
                     </div>

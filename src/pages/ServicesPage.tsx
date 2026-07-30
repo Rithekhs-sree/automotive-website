@@ -398,7 +398,7 @@ export default function ServicesPage() {
             <div className="w-24 h-1 bg-gradient-to-r from-red-500 to-blue-600 mx-auto rounded-full" />
           </motion.div>
 
-          <div className="flex flex-wrap justify-center gap-8">
+          <div className="flex flex-wrap justify-center gap-4 sm:gap-6 lg:gap-8">
             {services.map((service, index) => {
               const Icon = service.icon
               return (
@@ -409,33 +409,33 @@ export default function ServicesPage() {
                   viewport={{ once: true, margin: "-50px" }}
                   transition={{ duration: 0.6, delay: index * 0.15, type: "spring", bounce: 0.3 }}
                   whileHover={{ y: -8, scale: 1.02 }}
-                  className="group relative w-full md:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1.5rem)] max-w-md"
+                  className="group relative w-full sm:w-[calc(50%-1rem)] md:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1.5rem)] max-w-md"
                 >
                   <div className="absolute -inset-1 bg-gradient-to-r from-red-600 to-blue-600 rounded-2xl blur-lg opacity-0 group-hover:opacity-40 transition duration-500 group-hover:duration-200" />
                   
-                  <div className="relative h-full bg-slate-900 border border-slate-800 group-hover:border-slate-600 rounded-2xl p-8 flex flex-col overflow-hidden transition-all duration-300"
+                  <div className="relative h-full bg-slate-900 border border-slate-800 group-hover:border-slate-600 rounded-2xl p-5 sm:p-6 lg:p-8 flex flex-col overflow-hidden transition-all duration-300"
                        style={{ clipPath: 'polygon(0 0, 100% 0, 100% calc(100% - 24px), calc(100% - 24px) 100%, 0 100%)' }}>
                     
                     <div className="absolute top-0 right-0 w-40 h-40 bg-blue-500/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 group-hover:bg-red-500/10 transition-colors duration-500" />
                     
-                    <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${service.color} flex items-center justify-center mb-6 shadow-lg transform group-hover:scale-110 group-hover:rotate-6 transition-all duration-300`}>
-                      <Icon size={32} className="text-white" />
+                    <div className={`w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-2xl bg-gradient-to-br ${service.color} flex items-center justify-center mb-4 sm:mb-6 shadow-lg transform group-hover:scale-110 group-hover:rotate-6 transition-all duration-300`}>
+                      <Icon size={32} className="w-7 h-7 sm:w-8 sm:h-8 text-white" />
                     </div>
 
-                    <h3 className="text-2xl font-bold text-white mb-3 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-red-400 group-hover:to-blue-400 transition-all duration-300">
+                    <h3 className="text-lg sm:text-xl lg:text-2xl font-bold text-white mb-2 sm:mb-3 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-red-400 group-hover:to-blue-400 transition-all duration-300">
                       {service.title}
                     </h3>
                     
-                    <p className="text-slate-400 text-sm leading-relaxed mb-8 flex-grow">
+                    <p className="text-slate-400 text-xs sm:text-sm leading-relaxed mb-4 sm:mb-8 flex-grow">
                       {service.description}
                     </p>
 
                     <button
                       onClick={() => handleLearnMore(service)}
-                      className="relative inline-flex items-center justify-center gap-2 w-full py-3 px-6 bg-slate-800 hover:bg-transparent border border-slate-700 hover:border-red-500 text-slate-300 hover:text-white rounded-xl font-semibold text-sm tracking-wide overflow-hidden transition-all duration-300 group/btn cursor-pointer"
+                      className="relative inline-flex items-center justify-center gap-2 w-full py-2.5 sm:py-3 px-4 sm:px-6 bg-slate-800 hover:bg-transparent border border-slate-700 hover:border-red-500 text-slate-300 hover:text-white rounded-xl font-semibold text-xs sm:text-sm tracking-wide overflow-hidden transition-all duration-300 group/btn cursor-pointer"
                     >
                       <span className="relative z-10">LEARN MORE</span>
-                      <ArrowRight size={16} className="relative z-10 transform group-hover/btn:translate-x-1 transition-transform duration-300" />
+                      <ArrowRight size={16} className="w-3.5 h-3.5 sm:w-4 sm:h-4 relative z-10 transform group-hover/btn:translate-x-1 transition-transform duration-300" />
                       <div className="absolute inset-0 bg-gradient-to-r from-red-600 to-blue-600 transform translate-y-full group-hover/btn:translate-y-0 transition-transform duration-300 ease-out" />
                     </button>
 
@@ -461,14 +461,14 @@ export default function ServicesPage() {
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
-            className="bg-slate-900/50 border border-slate-800 rounded-3xl p-10 md:p-16 backdrop-blur-sm"
+            className="bg-slate-900/50 border border-slate-800 rounded-3xl p-6 sm:p-8 md:p-10 lg:p-16 backdrop-blur-sm"
           >
             <motion.h2 
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.2 }}
-              className="text-3xl md:text-5xl font-bold font-serif text-white mb-6"
+              className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold font-serif text-white mb-4 sm:mb-6"
             >
               Ready to <span className="text-red-500">Service</span> Your Vehicle?
             </motion.h2>
@@ -477,7 +477,7 @@ export default function ServicesPage() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.3 }}
-              className="text-blue-200 text-lg mb-10 max-w-2xl mx-auto"
+              className="text-sm sm:text-base md:text-lg text-blue-200 mb-6 sm:mb-8 max-w-2xl mx-auto"
             >
               Book an appointment today and experience the difference of professional, transparent, and reliable automotive care.
             </motion.p>
@@ -489,10 +489,10 @@ export default function ServicesPage() {
             >
               <Link 
                 to="/contact"
-                className="inline-flex items-center gap-3 bg-gradient-to-r from-red-600 to-blue-600 text-white px-10 py-4 rounded-full font-bold text-lg shadow-lg shadow-red-600/30 hover:shadow-red-600/50 hover:scale-105 transition-all duration-300"
+                className="inline-flex items-center gap-3 bg-gradient-to-r from-red-600 to-blue-600 text-white px-6 sm:px-8 lg:px-10 py-3 sm:py-4 rounded-full font-bold text-sm sm:text-base lg:text-lg shadow-lg shadow-red-600/30 hover:shadow-red-600/50 hover:scale-105 transition-all duration-300"
               >
                 Book Service Now
-                <ArrowRight size={20} />
+                <ArrowRight size={20} className="w-4 h-4 sm:w-5 sm:h-5" />
               </Link>
             </motion.div>
           </motion.div>

@@ -1,7 +1,56 @@
 import { motion } from 'framer-motion'
 import { MapPin, Phone, Mail, Clock, Send, Wrench } from 'lucide-react'
+import { useState } from 'react'
 
 export default function ContactPage() {
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle')
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    setIsSubmitting(true)
+    setSubmitStatus('idle')
+
+    const formData = new FormData(e.currentTarget)
+    const data = {
+      fullName: formData.get('fullName') as string,
+      phone: formData.get('phone') as string,
+      email: formData.get('email') as string,
+      vehicle: formData.get('vehicle') as string,
+      service: formData.get('service') as string,
+      message: formData.get('message') as string,
+    }
+
+    try {
+      const response = await fetch('http://localhost:3001/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      })
+
+      console.log('Response status:', response.status)
+      console.log('Response ok:', response.ok)
+      
+      const result = await response.json()
+      console.log('Response data:', result)
+      console.log('Result success:', result.success)
+
+      if (response.ok && result.success) {
+        setSubmitStatus('success')
+        e.currentTarget.reset()
+      } else {
+        setSubmitStatus('error')
+        console.error('Server returned error:', result)
+      }
+    } catch (error) {
+      console.error('Error submitting form:', error)
+      setSubmitStatus('error')
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
   const handleKeyDown = (
     e: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>,
     isLastField: boolean
@@ -28,7 +77,7 @@ export default function ContactPage() {
     <div className="min-h-screen bg-black text-white overflow-hidden">
       {/* HERO SECTION with Enhanced Designs */}
       {/* Increased min-h and pt-32 to ensure content sits comfortably below the fixed header */}
-      <section className="relative min-h-[90vh] flex items-center justify-center bg-slate-950 overflow-hidden pt-32 pb-20">
+      <section className="relative min-h-[80vh] sm:min-h-[90vh] flex items-center justify-center bg-slate-950 overflow-hidden pt-28 sm:pt-32 pb-16 sm:pb-20">
         {/* Animated Grid Pattern */}
         <div className="absolute inset-0 opacity-20">
           <div className="absolute inset-0" style={{
@@ -133,22 +182,22 @@ export default function ContactPage() {
         </div>
 
         {/* Content - Pushed down slightly with mt-8 to clear the header comfortably */}
-        <div className="relative z-10 max-w-4xl mx-auto px-4 text-center mt-8">
+        <div className="relative z-10 max-w-4xl mx-auto px-4 text-center mt-6 sm:mt-8">
           <motion.div
             initial={{ opacity: 0, scale: 0.9, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-950/80 to-blue-900/80 border-l-2 border-blue-500 border-r-2 border-red-500 rounded-full px-6 py-2 mb-8 backdrop-blur-md shadow-lg shadow-blue-900/30"
+            className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-950/80 to-blue-900/80 border-l-2 border-blue-500 border-r-2 border-red-500 rounded-full px-4 sm:px-6 py-2 mb-6 sm:mb-8 backdrop-blur-md shadow-lg shadow-blue-900/30"
           >
-            <Wrench size={16} className="text-red-400" />
-            <span className="text-blue-200 text-sm font-semibold tracking-wider uppercase">We're Here to Help</span>
+            <Wrench size={16} className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-red-400" />
+            <span className="text-blue-200 text-xs sm:text-sm font-semibold tracking-wider uppercase">We're Here to Help</span>
           </motion.div>
 
           <motion.h1
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="text-5xl sm:text-7xl font-bold font-serif leading-tight mb-6"
+            className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold font-serif leading-tight mb-4 sm:mb-6"
           >
             <span className="block text-white">Contact</span>
             <span className="block bg-gradient-to-r from-red-500 via-blue-400 to-red-500 bg-clip-text text-transparent">
@@ -160,7 +209,7 @@ export default function ContactPage() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
-            className="text-lg sm:text-xl text-blue-200 max-w-2xl mx-auto leading-relaxed"
+            className="text-base sm:text-lg md:text-xl text-blue-200 max-w-2xl mx-auto leading-relaxed"
           >
             Get in touch with our expert team for all your automotive servicing, repair, and inspection needs.
           </motion.p>
@@ -183,22 +232,22 @@ export default function ContactPage() {
       </section>
 
       {/* CONTACT INFO & MAP SECTION */}
-      <section className="relative py-24 px-4 sm:px-6 lg:px-8 bg-black">
+      <section className="relative py-16 sm:py-20 lg:py-24 px-4 sm:px-6 lg:px-8 bg-black">
         <div className="max-w-7xl mx-auto">
-          <div className="grid lg:grid-cols-2 gap-12 items-start">
+          <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-start">
             {/* Left: Contact Info */}
             <motion.div
               initial={{ opacity: 0, x: -50 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              className="space-y-8"
+              className="space-y-6 sm:space-y-8"
             >
               <div>
-                <h2 className="text-3xl sm:text-4xl font-bold font-serif text-white mb-2">Get In Touch</h2>
-                <div className="w-24 h-1 bg-gradient-to-r from-red-500 to-blue-600 rounded-full" />
+                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold font-serif text-white mb-2">Get In Touch</h2>
+                <div className="w-20 sm:w-24 h-1 bg-gradient-to-r from-red-500 to-blue-600 rounded-full" />
               </div>
 
-              <div className="space-y-6">
+              <div className="space-y-4 sm:space-y-6">
                 {[
                   { icon: MapPin, title: "Address", lines: ["14 Hill Street", "Wentworthville", "NSW 2145, Australia"] },
                   { icon: Phone, title: "Phone", lines: ["(02) 1234 5678", "Mon-Fri: 7:30am - 5:00pm"] },
@@ -211,15 +260,15 @@ export default function ContactPage() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: idx * 0.1 }}
-                    className="flex items-start gap-4 group"
+                    className="flex items-start gap-3 sm:gap-4 group"
                   >
-                    <div className="w-12 h-12 bg-slate-900 border border-slate-700 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:border-red-500/50 group-hover:bg-red-500/10 transition-all duration-300">
-                      <item.icon className="w-6 h-6 text-red-500" />
+                    <div className="w-10 h-10 sm:w-12 sm:h-12 bg-slate-900 border border-slate-700 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:border-red-500/50 group-hover:bg-red-500/10 transition-all duration-300">
+                      <item.icon className="w-5 h-5 sm:w-6 sm:h-6 text-red-500" />
                     </div>
                     <div>
-                      <h3 className="font-semibold text-lg text-white mb-1">{item.title}</h3>
+                      <h3 className="font-semibold text-base sm:text-lg text-white mb-1">{item.title}</h3>
                       {item.lines.map((line, i) => (
-                        <p key={i} className="text-blue-200/80 text-sm leading-relaxed">{line}</p>
+                        <p key={i} className="text-blue-200/80 text-xs sm:text-sm leading-relaxed">{line}</p>
                       ))}
                     </div>
                   </motion.div>
@@ -232,7 +281,7 @@ export default function ContactPage() {
               initial={{ opacity: 0, x: 50 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              className="relative h-[400px] lg:h-full min-h-[400px] rounded-2xl overflow-hidden border border-slate-800 shadow-2xl shadow-blue-900/20"
+              className="relative h-[300px] sm:h-[400px] lg:h-full min-h-[300px] lg:min-h-[400px] rounded-2xl overflow-hidden border border-slate-800 shadow-2xl shadow-blue-900/20"
             >
               <iframe 
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3316.123456789!2d150.938!3d-33.805!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6b129838f39a743d%3A0x5017d681632a850!2s14%20Hill%20St%2C%20Wentworthville%20NSW%202145%2C%20Australia!5e0!3m2!1sen!2sau!4v1600000000000!5m2!1sen!2sau"
@@ -252,7 +301,7 @@ export default function ContactPage() {
       </section>
 
       {/* MESSAGE FORM SECTION */}
-      <section className="relative py-24 px-4 sm:px-6 lg:px-8 bg-slate-950">
+      <section className="relative py-16 sm:py-20 lg:py-24 px-4 sm:px-6 lg:px-8 bg-slate-950">
         {/* Background Pattern */}
         <div className="absolute inset-0 opacity-5">
           <div className="absolute inset-0" style={{
@@ -266,78 +315,80 @@ export default function ContactPage() {
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-center mb-12"
+            className="text-center mb-8 sm:mb-12"
           >
-            <h2 className="text-3xl sm:text-4xl font-bold font-serif text-white mb-4">Send Us a Message</h2>
-            <div className="w-24 h-1 bg-gradient-to-r from-red-500 to-blue-600 mx-auto rounded-full" />
-            <p className="text-blue-200 mt-4">Fill out the form below and we'll get back to you as soon as possible.</p>
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold font-serif text-white mb-4">Send Us a Message</h2>
+            <div className="w-20 sm:w-24 h-1 bg-gradient-to-r from-red-500 to-blue-600 mx-auto rounded-full" />
+            <p className="text-blue-200 mt-4 text-sm sm:text-base">Fill out the form below and we'll get back to you as soon as possible.</p>
           </motion.div>
 
           <motion.form
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="bg-slate-900/50 border border-slate-800 rounded-3xl p-8 md:p-12 backdrop-blur-sm space-y-6 shadow-2xl shadow-blue-900/10"
-            onSubmit={(e) => {
-              e.preventDefault()
-              alert("Message sent successfully!")
-            }}
+            className="bg-slate-900/50 border border-slate-800 rounded-3xl p-6 sm:p-8 md:p-12 backdrop-blur-sm space-y-4 sm:space-y-6 shadow-2xl shadow-blue-900/10"
+            onSubmit={handleSubmit}
           >
-            <div className="grid md:grid-cols-2 gap-6">
+            <div className="grid sm:grid-cols-2 gap-4 sm:gap-6">
               {/* Full Name */}
               <div className="space-y-2">
-                <label className="block text-sm font-semibold text-blue-200">Full Name <span className="text-red-500">*</span></label>
+                <label className="block text-xs sm:text-sm font-semibold text-blue-200">Full Name <span className="text-red-500">*</span></label>
                 <input
                   type="text"
+                  name="fullName"
                   required
                   placeholder="John Doe"
                   onKeyDown={(e) => handleKeyDown(e, false)}
-                  className="w-full px-4 py-3 bg-slate-950 border border-slate-700 rounded-xl focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition-all text-white placeholder-slate-500"
+                  className="w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-slate-950 border border-slate-700 rounded-xl focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition-all text-white placeholder-slate-500 text-sm sm:text-base"
                 />
               </div>
 
               {/* Phone */}
               <div className="space-y-2">
-                <label className="block text-sm font-semibold text-blue-200">Phone <span className="text-red-500">*</span></label>
+                <label className="block text-xs sm:text-sm font-semibold text-blue-200">Phone <span className="text-red-500">*</span></label>
                 <input
                   type="tel"
+                  name="phone"
                   required
                   placeholder="(02) 1234 5678"
                   onKeyDown={(e) => handleKeyDown(e, false)}
-                  className="w-full px-4 py-3 bg-slate-950 border border-slate-700 rounded-xl focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition-all text-white placeholder-slate-500"
+                  className="w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-slate-950 border border-slate-700 rounded-xl focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition-all text-white placeholder-slate-500 text-sm sm:text-base"
                 />
               </div>
 
               {/* Email */}
               <div className="space-y-2">
-                <label className="block text-sm font-semibold text-blue-200">Email <span className="text-red-500">*</span></label>
+                <label className="block text-xs sm:text-sm font-semibold text-blue-200">Email <span className="text-red-500">*</span></label>
                 <input
                   type="email"
+                  name="email"
                   required
                   placeholder="john@example.com"
                   onKeyDown={(e) => handleKeyDown(e, false)}
-                  className="w-full px-4 py-3 bg-slate-950 border border-slate-700 rounded-xl focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition-all text-white placeholder-slate-500"
+                  className="w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-slate-950 border border-slate-700 rounded-xl focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition-all text-white placeholder-slate-500 text-sm sm:text-base"
                 />
               </div>
 
               {/* Vehicle */}
               <div className="space-y-2">
-                <label className="block text-sm font-semibold text-blue-200">Vehicle (Make & Model)</label>
+                <label className="block text-xs sm:text-sm font-semibold text-blue-200">Vehicle (Make & Model)</label>
                 <input
                   type="text"
+                  name="vehicle"
                   placeholder="e.g., 2018 Toyota Camry"
                   onKeyDown={(e) => handleKeyDown(e, false)}
-                  className="w-full px-4 py-3 bg-slate-950 border border-slate-700 rounded-xl focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition-all text-white placeholder-slate-500"
+                  className="w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-slate-950 border border-slate-700 rounded-xl focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition-all text-white placeholder-slate-500 text-sm sm:text-base"
                 />
               </div>
             </div>
 
             {/* Service Required */}
             <div className="space-y-2">
-              <label className="block text-sm font-semibold text-blue-200">Service Required</label>
+              <label className="block text-xs sm:text-sm font-semibold text-blue-200">Service Required</label>
               <select
+                name="service"
                 onKeyDown={(e) => handleKeyDown(e, false)}
-                className="w-full px-4 py-3 bg-slate-950 border border-slate-700 rounded-xl focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition-all text-white appearance-none cursor-pointer"
+                className="w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-slate-950 border border-slate-700 rounded-xl focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition-all text-white appearance-none cursor-pointer text-sm sm:text-base"
               >
                 <option value="" className="bg-slate-900">Select a service...</option>
                 <option value="logbook" className="bg-slate-900">Log Book Service</option>
@@ -351,24 +402,42 @@ export default function ContactPage() {
 
             {/* Message */}
             <div className="space-y-2">
-              <label className="block text-sm font-semibold text-blue-200">Message</label>
+              <label className="block text-xs sm:text-sm font-semibold text-blue-200">Message</label>
               <textarea
+                name="message"
                 placeholder="Tell us about your automotive needs..."
-                rows={5}
+                rows={4}
                 onKeyDown={(e) => handleKeyDown(e, true)}
-                className="w-full px-4 py-3 bg-slate-950 border border-slate-700 rounded-xl focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition-all text-white placeholder-slate-500 resize-none"
+                className="w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-slate-950 border border-slate-700 rounded-xl focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition-all text-white placeholder-slate-500 resize-none text-sm sm:text-base"
               />
             </div>
+
+            {/* Status Messages */}
+            {submitStatus === 'success' && (
+              <div className="bg-green-900/50 border border-green-700 text-green-200 px-4 py-3 rounded-xl text-sm">
+                Message sent successfully! We'll get back to you soon.
+              </div>
+            )}
 
             {/* Submit Button */}
             <motion.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               type="submit"
-              className="w-full py-4 bg-gradient-to-r from-red-600 to-blue-600 hover:from-red-700 hover:to-blue-700 text-white rounded-xl font-bold text-lg shadow-lg shadow-red-600/20 transition-all flex items-center justify-center gap-2 group"
+              disabled={isSubmitting}
+              className="w-full py-3 sm:py-4 bg-gradient-to-r from-red-600 to-blue-600 hover:from-red-700 hover:to-blue-700 text-white rounded-xl font-bold text-base sm:text-lg shadow-lg shadow-red-600/20 transition-all flex items-center justify-center gap-2 group disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              <Send size={20} className="group-hover:translate-x-1 transition-transform" />
-              Send Message
+              {isSubmitting ? (
+                <>
+                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                  Sending...
+                </>
+              ) : (
+                <>
+                  <Send size={20} className="w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform" />
+                  Send Message
+                </>
+              )}
             </motion.button>
           </motion.form>
         </div>
