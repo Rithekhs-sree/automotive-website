@@ -47,7 +47,6 @@ app.post('/api/contact', async (req, res) => {
       throw new Error('Email credentials are missing. Check backend/.env');
     }
     
-    // Email to the business owner
     const mailOptions = {
       from: process.env.EMAIL_USER,
       to: process.env.EMAIL_USER,
@@ -69,10 +68,6 @@ app.post('/api/contact', async (req, res) => {
       `
     };
 
-    await transporter.sendMail(mailOptions);
-    console.log('Email to business owner sent successfully');
-
-    // Confirmation email to the user
     const confirmationMailOptions = {
       from: process.env.EMAIL_USER,
       to: email,
@@ -93,17 +88,28 @@ app.post('/api/contact', async (req, res) => {
       `
     };
 
-    await transporter.sendMail(confirmationMailOptions);
-    console.log('Confirmation email sent successfully');
-    console.log('Sending success response to client');
-    res.status(200).json({ success: true, message: 'Email sent successfully' });
-    console.log('Success response sent');
+    const [ownerResult, confirmationResult] = await Promise.allSettled([
+      transporter.sendMail(mailOptions),
+      transporter.sendMail(confirmationMailOptions)
+    ]);
+
+    const failed = [ownerResult, confirmationResult].filter(r => r.status === 'rejected');
+    if (failed.length > 0) {
+      const errors = failed.map((r) => r.status === 'rejected' ? r.reason?.message || 'unknown error' : '').join(' | ');
+      console.error('Some emails failed:', errors);
+      return res.status(500).json({ success: false, message: 'Failed to send one or more emails', error: errors });
+    }
+
+    console.log('Both emails sent successfully');
+    return res.status(200).json({ success: true, message: 'Email sent successfully' });
   } catch (error) {
     console.error('Error sending email:', error);
-    console.log('Sending error response to client');
-    res.status(500).json({ success: false, message: 'Failed to send email', error: error.message });
-    console.log('Error response sent');
+    return res.status(500).json({ success: false, message: 'Failed to send email', error: error.message });
   }
+});
+
+app.get('/api/contact', (req, res) => {
+  res.status(200).json({ message: 'Contact endpoint is POST only. Submit via the contact form.' });
 });
 
 // Root endpoint
