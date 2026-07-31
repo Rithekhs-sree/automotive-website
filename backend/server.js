@@ -57,8 +57,10 @@ app.use(cors({
   credentials: true,
 }));
 
-// Ensure preflight (OPTIONS) requests are handled for all routes
-app.options('*', cors());
+// NOTE: No explicit app.options('*') needed. The cors() middleware above
+// (applied via app.use) already handles preflight OPTIONS requests for all
+// routes. Express 5 uses path-to-regexp v8, which rejects a bare '*' route
+// pattern, so an explicit wildcard here would crash on startup.
 
 app.use(express.json());
 
