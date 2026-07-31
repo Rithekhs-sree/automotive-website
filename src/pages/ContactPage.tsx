@@ -29,11 +29,12 @@ export default function ContactPage() {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    const form = e.currentTarget
     setIsSubmitting(true)
     setSubmitStatus('idle')
     setSubmitMessage('')
 
-    const formData = new FormData(e.currentTarget)
+    const formData = new FormData(form)
     const data = {
       fullName: formData.get('fullName') as string,
       phone: formData.get('phone') as string,
@@ -74,7 +75,13 @@ export default function ContactPage() {
       if (response.ok && result.success) {
         setSubmitStatus('success')
         setSubmitMessage(result.message || 'Message sent successfully! We will get back to you soon.')
-        e.currentTarget.reset()
+        try {
+          if (form && typeof form.reset === 'function') {
+            form.reset()
+          }
+        } catch (resetError) {
+          console.warn('Form reset failed:', resetError)
+        }
         window.setTimeout(() => {
           setSubmitStatus('idle')
           setSubmitMessage('')
