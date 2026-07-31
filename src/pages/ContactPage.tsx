@@ -42,13 +42,16 @@ export default function ContactPage() {
       if (response.ok && result.success) {
         setSubmitStatus('success')
         e.currentTarget.reset()
+        window.setTimeout(() => setSubmitStatus('idle'), 7000)
       } else {
         setSubmitStatus('error')
         console.error('Server returned error:', result)
+        window.setTimeout(() => setSubmitStatus('idle'), 7000)
       }
     } catch (error) {
       console.error('Error submitting form:', error)
       setSubmitStatus('error')
+      window.setTimeout(() => setSubmitStatus('idle'), 7000)
     } finally {
       setIsSubmitting(false)
     }
@@ -419,6 +422,11 @@ export default function ContactPage() {
             {submitStatus === 'success' && (
               <div className="bg-green-900/50 border border-green-700 text-green-200 px-4 py-3 rounded-xl text-sm">
                 Message sent successfully! We'll get back to you soon.
+              </div>
+            )}
+            {submitStatus === 'error' && (
+              <div className="bg-red-900/50 border border-red-700 text-red-200 px-4 py-3 rounded-xl text-sm">
+                Something went wrong. Please try again shortly.
               </div>
             )}
 
