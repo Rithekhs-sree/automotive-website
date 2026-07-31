@@ -66,16 +66,33 @@ app.use(express.json());
 
 // Email configuration
 const smtpHost = process.env.SMTP_HOST || 'smtp.gmail.com';
-const smtpPort = Number(process.env.SMTP_PORT || 465);
-const smtpSecure = true; // SSL for port 465
+const smtpPort = Number(process.env.SMTP_PORT || 587);
+const smtpSecure = smtpPort === 587; // SSL for 465, STARTTLS for 587
+
+// Gmail App Passwords are displayed with spaces (e.g. "abcd efgh ijkl mnop").
+// Pasting them verbatim breaks auth, so strip all whitespace defensively.
+const emailUser = (process.env.EMAIL_USER || '').trim();
+const emailPass = (process.env.EMAIL_PASS || '').replace(/\s+/g, '');
+
+if (!emailUser || !emailPass) {
+  console.warn(
+    '⚠️  EMAIL_USER and/or EMAIL_PASS are not set. ' +
+    'Emails will NOT be sent. Set them in Render → Environment, ' +
+    'and use a Gmail App Password (not your account password).'
+  );
+}
 
 const transporterConfig = {
   host: smtpHost,
   port: smtpPort,
   secure: smtpSecure,
+  // Force IPv4. Render containers have no working outbound IPv6, so when
+  // Gmail's DNS returns an AAAA (IPv6) record and Node tries it, the socket
+  // fails with ENETUNREACH. family: 4 makes nodemailer resolve to IPv4 only.
+  family: 4,
   auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
+    user: emailUser,
+    pass: emailPass,
   },
   tls: {
     rejectUnauthorized: false,
@@ -92,8 +109,8 @@ console.log('Email transport config:', {
   smtpHost,
   smtpPort,
   smtpSecure,
-  emailUserConfigured: !!process.env.EMAIL_USER,
-  emailPassConfigured: !!process.env.EMAIL_PASS,
+  emailUserConfigured: !!emailUser,
+  emailPassConfigured: !!emailPass,
 });
 
 const transporter = nodemailer.createTransport(transporterConfig);
@@ -111,17 +128,13 @@ app.post('/api/contact', async (req, res) => {
   const { fullName, phone, email, vehicle, service, message } = req.body;
 
   try {
-    console.log('Attempting to send email to:', process.env.EMAIL_USER);
-    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
-      console.log('Email credentials missing, skipping email send but returning success');
+    console.log('Attempting to send email to:', emailUser);
+    if (!emailUser || !emailPass) {
+      console.warn('Email credentials missing, skipping email send but returning success');
       return res.status(200).json({ success: true, message: 'Message received successfully' });
     }
 
-    const ownerEmail = process.env.EMAIL_USER;
-    if (!ownerEmail) {
-      console.log('No owner email configured, skipping email send but returning success');
-      return res.status(200).json({ success: true, message: 'Message received successfully' });
-    }
+    const ownerEmail = emailUser;
 
     console.log('Sending email to owner:', ownerEmail);
 
