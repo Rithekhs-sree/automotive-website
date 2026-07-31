@@ -13,20 +13,6 @@ export default function ContactPage() {
       ? 'http://localhost:3001/api/contact'
       : 'https://automotive-website-z3ds.onrender.com/api/contact'
 
-  const ownerEmail = 'automotive794@gmail.com'
-
-  const openMailClient = (data: {
-    fullName: string
-    phone: string
-    email: string
-    vehicle: string
-    service: string
-    message: string
-  }) => {
-    const body = encodeURIComponent(`Name: ${data.fullName}\nPhone: ${data.phone}\nEmail: ${data.email}\nVehicle: ${data.vehicle || 'Not specified'}\nService: ${data.service || 'Not specified'}\nMessage: ${data.message}`)
-    window.location.href = `mailto:${ownerEmail}?subject=${encodeURIComponent('Contact Form Submission from ' + data.fullName)}&body=${body}`
-  }
-
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     const form = e.currentTarget
