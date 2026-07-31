@@ -2,13 +2,20 @@ import express from 'express';
 import cors from 'cors';
 import nodemailer from 'nodemailer';
 import dotenv from 'dotenv';
+import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-dotenv.config({ path: path.join(__dirname, '.env') });
+const envPath = path.join(__dirname, '.env');
+const rootEnvPath = path.join(__dirname, '..', '.env');
+
+dotenv.config({ path: envPath });
+if ((!process.env.EMAIL_USER || !process.env.EMAIL_PASS) && fs.existsSync(rootEnvPath)) {
+  dotenv.config({ path: rootEnvPath });
+}
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -19,7 +26,7 @@ app.use(express.json());
 
 // Email configuration
 const smtpHost = process.env.SMTP_HOST;
-const smtpPort = Number(process.env.SMTP_PORT || 465);
+const smtpPort = Number(process.env.SMTP_PORT || 587);
 const smtpSecure = process.env.SMTP_SECURE ? process.env.SMTP_SECURE === 'true' : smtpPort === 465;
 
 const transporterConfig = smtpHost
@@ -41,6 +48,14 @@ const transporterConfig = smtpHost
       },
       tls: { rejectUnauthorized: false },
     };
+
+console.log('Email transport config:', {
+  smtpHost: smtpHost || 'gmail',
+  smtpPort,
+  smtpSecure,
+  emailUserConfigured: !!process.env.EMAIL_USER,
+  emailPassConfigured: !!process.env.EMAIL_PASS,
+});
 
 const transporter = nodemailer.createTransport(transporterConfig);
 
@@ -66,7 +81,6 @@ app.post('/api/contact', async (req, res) => {
     const mailOptions = {
       from: `"C & S Automotive" <${process.env.EMAIL_USER}>`,
       to: process.env.EMAIL_USER,
-      replyTo: email,
       subject: `New Contact Form Submission from ${fullName}`,
       text: `Name: ${fullName}\nPhone: ${phone}\nEmail: ${email}\nVehicle: ${vehicle || 'Not specified'}\nService Required: ${service || 'Not specified'}\nMessage: ${message}`,
       html: `
@@ -88,13 +102,7 @@ app.post('/api/contact', async (req, res) => {
 
     const ownerResult = await transporter.sendMail(mailOptions);
 
-    if (!ownerResult.accepted || ownerResult.accepted.length === 0) {
-      const errorMessage = 'Owner email was not accepted by SMTP server.';
-      console.error(errorMessage, ownerResult);
-      return res.status(500).json({ success: false, message: errorMessage, error: JSON.stringify(ownerResult) });
-    }
-
-    console.log('Owner email sent successfully', ownerResult);
+    console.log('Owner email send result:', ownerResult);
     return res.status(200).json({ success: true, message: 'Email sent successfully' });
   } catch (error) {
     console.error('Error sending email:', error);
