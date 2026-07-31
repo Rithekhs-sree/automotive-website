@@ -25,32 +25,23 @@ app.use(cors());
 app.use(express.json());
 
 // Email configuration
-const smtpHost = process.env.SMTP_HOST;
+const smtpHost = process.env.SMTP_HOST || 'smtp.gmail.com';
 const smtpPort = Number(process.env.SMTP_PORT || 587);
 const smtpSecure = process.env.SMTP_SECURE ? process.env.SMTP_SECURE === 'true' : smtpPort === 465;
 
-const transporterConfig = smtpHost
-  ? {
-      host: smtpHost,
-      port: smtpPort,
-      secure: smtpSecure,
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
-      },
-      tls: { rejectUnauthorized: false },
-    }
-  : {
-      service: 'gmail',
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
-      },
-      tls: { rejectUnauthorized: false },
-    };
+const transporterConfig = {
+  host: smtpHost,
+  port: smtpPort,
+  secure: smtpSecure,
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS,
+  },
+  tls: { rejectUnauthorized: false },
+};
 
 console.log('Email transport config:', {
-  smtpHost: smtpHost || 'gmail',
+  smtpHost,
   smtpPort,
   smtpSecure,
   emailUserConfigured: !!process.env.EMAIL_USER,
