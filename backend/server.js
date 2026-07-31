@@ -26,8 +26,8 @@ app.use(express.json());
 
 // Email configuration
 const smtpHost = process.env.SMTP_HOST || 'smtp.gmail.com';
-const smtpPort = Number(process.env.SMTP_PORT || 587);
-const smtpSecure = false; // Use STARTTLS for port 587
+const smtpPort = Number(process.env.SMTP_PORT || 465);
+const smtpSecure = true; // SSL for port 465
 
 const transporterConfig = {
   host: smtpHost,
@@ -38,11 +38,14 @@ const transporterConfig = {
     pass: process.env.EMAIL_PASS,
   },
   tls: { 
-    rejectUnauthorized: false 
+    rejectUnauthorized: false,
+    servername: smtpHost
   },
-  connectionTimeout: 30000,
-  greetingTimeout: 30000,
-  socketTimeout: 30000,
+  connectionTimeout: 60000,
+  greetingTimeout: 60000,
+  socketTimeout: 60000,
+  debug: true,
+  logger: true,
 };
 
 console.log('Email transport config:', {
