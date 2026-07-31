@@ -7,7 +7,7 @@ export default function ContactPage() {
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle')
   const [submitMessage, setSubmitMessage] = useState('')
 
-  const apiBaseUrl = import.meta.env.VITE_API_URL || (import.meta.env.DEV ? 'http://localhost:3001' : '')
+  const apiBaseUrl = import.meta.env.VITE_API_URL ?? ''
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -36,8 +36,19 @@ export default function ContactPage() {
 
       console.log('Response status:', response.status)
       console.log('Response ok:', response.ok)
-      
-      const result = await response.json()
+
+      let result: { success?: boolean; message?: string; error?: string } = {}
+      const text = await response.text()
+      try {
+        result = JSON.parse(text)
+      } catch (parseError) {
+        console.warn('Failed to parse response JSON:', parseError, text)
+        result = {
+          success: false,
+          message: `Unexpected server response: ${text.slice(0, 200)}`
+        }
+      }
+
       console.log('Response data:', result)
       console.log('Result success:', result.success)
 
