@@ -21,23 +21,45 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 
 // Middleware
-const allowedOrigins = [
+// Explicit production/local origins, plus a regex to allow any Vercel
+// preview/production deploy under the "automotive-*" project prefix.
+const staticAllowedOrigins = [
+  'https://automotive-rithekha.vercel.app',
   'https://automotive-f95916053-rithekha.vercel.app',
   'https://automotive-zeta-wine.vercel.app',
   'http://localhost:5173',
-  'http://localhost:3000'
+  'http://localhost:3000',
 ];
+
+// Matches things like:
+//   https://automotive-rithekha.vercel.app
+//   https://automotive-abc123-rithekha.vercel.app
+//   https://automotive-zeta-wine.vercel.app
+const vercelOriginRegex = /^https:\/\/automotive-[a-z0-9-]*\.vercel\.app$/;
+
+function isOriginAllowed(origin) {
+  // Allow non-browser clients (curl, health checks, server-to-server) with no Origin header
+  if (!origin) return true;
+  if (staticAllowedOrigins.includes(origin)) return true;
+  if (vercelOriginRegex.test(origin)) return true;
+  return false;
+}
 
 app.use(cors({
   origin: function (origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
+    if (isOriginAllowed(origin)) {
       callback(null, true);
     } else {
+      console.warn('CORS: blocked origin ->', origin);
       callback(new Error('Not allowed by CORS'));
     }
   },
-  credentials: true
+  credentials: true,
 }));
+
+// Ensure preflight (OPTIONS) requests are handled for all routes
+app.options('*', cors());
+
 app.use(express.json());
 
 // Email configuration
@@ -53,9 +75,9 @@ const transporterConfig = {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
   },
-  tls: { 
+  tls: {
     rejectUnauthorized: false,
-    servername: smtpHost
+    servername: smtpHost,
   },
   connectionTimeout: 60000,
   greetingTimeout: 60000,
@@ -120,7 +142,7 @@ app.post('/api/contact', async (req, res) => {
           </div>
           <p style="margin-top: 20px; color: #6b7280; font-size: 12px;">This email was sent from the C & S Automotive contact form.</p>
         </div>
-      `
+      `,
     };
 
     try {
@@ -137,7 +159,7 @@ app.post('/api/contact', async (req, res) => {
         email,
         vehicle,
         service,
-        message
+        message,
       });
     }
 
@@ -160,9 +182,9 @@ app.get('/', (req, res) => {
     message: 'C & S Automotive Backend Server',
     endpoints: {
       health: '/api/health',
-      contact: '/api/contact (POST)'
+      contact: '/api/contact (POST)',
     },
-    status: 'running'
+    status: 'running',
   });
 });
 
