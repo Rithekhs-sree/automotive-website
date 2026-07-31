@@ -4,7 +4,13 @@ import nodemailer from 'nodemailer';
 import dotenv from 'dotenv';
 import fs from 'fs';
 import path from 'path';
+import dns from 'dns';
 import { fileURLToPath } from 'url';
+
+// Prefer IPv4 globally. Render containers have no working outbound IPv6, so
+// any AAAA (IPv6) address returned for smtp.gmail.com is unreachable and
+// causes ENETUNREACH. This is one of several IPv4 guards below.
+dns.setDefaultResultOrder('ipv4first');
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -66,8 +72,8 @@ app.use(express.json());
 
 // Email configuration
 const smtpHost = process.env.SMTP_HOST || 'smtp.gmail.com';
-const smtpPort = Number(process.env.SMTP_PORT || 587);
-const smtpSecure = smtpPort === 587; // SSL for 465, STARTTLS for 587
+const smtpPort = Number(process.env.SMTP_PORT || 465);
+const smtpSecure = smtpPort === 465; // SSL for 465, STARTTLS for 587
 
 // Gmail App Passwords are displayed with spaces (e.g. "abcd efgh ijkl mnop").
 // Pasting them verbatim breaks auth, so strip all whitespace defensively.
@@ -86,10 +92,12 @@ const transporterConfig = {
   host: smtpHost,
   port: smtpPort,
   secure: smtpSecure,
-  // Force IPv4. Render containers have no working outbound IPv6, so when
-  // Gmail's DNS returns an AAAA (IPv6) record and Node tries it, the socket
-  // fails with ENETUNREACH. family: 4 makes nodemailer resolve to IPv4 only.
+  // Force IPv4. Render has no working outbound IPv6.
   family: 4,
+  // Belt-and-suspenders: a custom resolver that ONLY ever returns IPv4
+  // addresses, so nodemailer can never hand an IPv6 address to the socket.
+  lookup: (hostname, options, callback) =>
+    dns.lookup(hostname, { ...options, family: 4 }, callback),
   auth: {
     user: emailUser,
     pass: emailPass,
@@ -113,14 +121,42 @@ console.log('Email transport config:', {
   emailPassConfigured: !!emailPass,
 });
 
-const transporter = nodemailer.createTransport(transporterConfig);
+let transporter = nodemailer.createTransport(transporterConfig);
 
-// Verify transporter once at startup and keep the transport ready
-transporter.verify().then(() => {
-  console.log('SMTP server is ready to send emails');
-}).catch((error) => {
-  console.error('SMTP verification failed:', error);
-});
+// The most reliable IPv4 guard: resolve smtp.gmail.com to an IPv4 address
+// ourselves and connect to that literal IP. A literal IP means Node performs
+// NO DNS lookup at connect time, so an IPv6 address can never be attempted.
+// We keep tls.servername = the real hostname so the TLS certificate (issued
+// for smtp.gmail.com, not the IP) still validates correctly.
+async function initTransport() {
+  try {
+    const { address } = await dns.promises.lookup(smtpHost, { family: 4 });
+    console.log(`Resolved ${smtpHost} to IPv4 ${address}; using it as SMTP host.`);
+    transporter = nodemailer.createTransport({
+      ...transporterConfig,
+      host: address,            // connect to the IPv4 literal
+      tls: {
+        rejectUnauthorized: false,
+        servername: smtpHost,   // validate cert against the real hostname
+      },
+    });
+  } catch (err) {
+    console.warn(
+      `Could not pre-resolve ${smtpHost} to IPv4 (${err.message}). ` +
+      'Falling back to hostname-based transport with family: 4.'
+    );
+  }
+
+  // Verify transporter once at startup and keep the transport ready
+  try {
+    await transporter.verify();
+    console.log('SMTP server is ready to send emails');
+  } catch (error) {
+    console.error('SMTP verification failed:', error);
+  }
+}
+
+initTransport();
 
 // Contact form endpoint
 app.post('/api/contact', async (req, res) => {
