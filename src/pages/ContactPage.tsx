@@ -5,6 +5,7 @@ import { type FormEvent, type KeyboardEvent, useState } from 'react'
 export default function ContactPage() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle')
+  const [submitMessage, setSubmitMessage] = useState('')
 
   const apiBaseUrl = import.meta.env.VITE_API_URL || (import.meta.env.DEV ? 'http://localhost:3001' : '')
 
@@ -12,6 +13,7 @@ export default function ContactPage() {
     e.preventDefault()
     setIsSubmitting(true)
     setSubmitStatus('idle')
+    setSubmitMessage('')
 
     const formData = new FormData(e.currentTarget)
     const data = {
@@ -41,17 +43,31 @@ export default function ContactPage() {
 
       if (response.ok && result.success) {
         setSubmitStatus('success')
+        setSubmitMessage(result.message || 'Message sent successfully! We will get back to you soon.')
         e.currentTarget.reset()
-        window.setTimeout(() => setSubmitStatus('idle'), 7000)
+        window.setTimeout(() => {
+          setSubmitStatus('idle')
+          setSubmitMessage('')
+        }, 7000)
       } else {
+        const message = result?.message || 'Failed to send your message. Please try again.'
         setSubmitStatus('error')
+        setSubmitMessage(message)
         console.error('Server returned error:', result)
-        window.setTimeout(() => setSubmitStatus('idle'), 7000)
+        window.setTimeout(() => {
+          setSubmitStatus('idle')
+          setSubmitMessage('')
+        }, 7000)
       }
     } catch (error) {
+      const message = error instanceof Error ? error.message : String(error)
       console.error('Error submitting form:', error)
       setSubmitStatus('error')
-      window.setTimeout(() => setSubmitStatus('idle'), 7000)
+      setSubmitMessage(message)
+      window.setTimeout(() => {
+        setSubmitStatus('idle')
+        setSubmitMessage('')
+      }, 7000)
     } finally {
       setIsSubmitting(false)
     }
@@ -419,14 +435,9 @@ export default function ContactPage() {
             </div>
 
             {/* Status Messages */}
-            {submitStatus === 'success' && (
-              <div className="bg-green-900/50 border border-green-700 text-green-200 px-4 py-3 rounded-xl text-sm">
-                Message sent successfully! We'll get back to you soon.
-              </div>
-            )}
-            {submitStatus === 'error' && (
-              <div className="bg-red-900/50 border border-red-700 text-red-200 px-4 py-3 rounded-xl text-sm">
-                Something went wrong. Please try again shortly.
+            {submitStatus !== 'idle' && submitMessage && (
+              <div className={`px-4 py-3 rounded-xl text-sm ${submitStatus === 'success' ? 'bg-green-900/50 border border-green-700 text-green-200' : 'bg-red-900/50 border border-red-700 text-red-200'}`}>
+                {submitMessage}
               </div>
             )}
 
