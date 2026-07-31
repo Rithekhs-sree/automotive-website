@@ -79,13 +79,18 @@ export default function ContactPage() {
           setSubmitStatus('idle')
           setSubmitMessage('')
         }, 7000)
-      } else if (response.status === 404) {
-        setSubmitStatus('error')
-        setSubmitMessage('Backend endpoint not found. Opening email client as fallback...')
-        console.error('Server returned 404 for contact endpoint:', result)
-        openMailClient(data)
       } else {
-        const message = result?.message || 'Failed to send your message. Please try again.'
+        const message = result?.message || result?.error || 'Failed to send your message. Please try again.'
+        const shouldFallback = response.status >= 500 || response.status === 404
+
+        if (shouldFallback) {
+          setSubmitStatus('error')
+          setSubmitMessage(`${message} Opening email client as fallback...`)
+          console.error('Server returned error for contact endpoint:', response.status, result)
+          openMailClient(data)
+          return
+        }
+
         setSubmitStatus('error')
         setSubmitMessage(message)
         console.error('Server returned error:', result)

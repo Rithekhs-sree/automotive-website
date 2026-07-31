@@ -44,9 +44,9 @@ app.post('/api/contact', async (req, res) => {
   try {
     console.log('Attempting to send email to:', process.env.EMAIL_USER);
     if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
-      throw new Error('Email credentials are missing. Check backend/.env');
+      throw new Error('Email credentials are missing. Check backend/.env or Render environment variables.');
     }
-    
+
     const mailOptions = {
       from: process.env.EMAIL_USER,
       to: process.env.EMAIL_USER,
@@ -88,23 +88,36 @@ app.post('/api/contact', async (req, res) => {
       `
     };
 
-    const [ownerResult, confirmationResult] = await Promise.allSettled([
-      transporter.sendMail(mailOptions),
-      transporter.sendMail(confirmationMailOptions)
-    ]);
+    const ownerResult = await transporter.sendMail(mailOptions);
+    let confirmationError = null;
 
-    const failed = [ownerResult, confirmationResult].filter(r => r.status === 'rejected');
-    if (failed.length > 0) {
-      const errors = failed.map((r) => r.status === 'rejected' ? r.reason?.message || 'unknown error' : '').join(' | ');
-      console.error('Some emails failed:', errors);
-      return res.status(500).json({ success: false, message: 'Failed to send one or more emails', error: errors });
+    try {
+      await transporter.sendMail(confirmationMailOptions);
+    } catch (confirmationFailure) {
+      confirmationError = confirmationFailure;
+      console.error('Confirmation email failed, but owner email was sent:', confirmationFailure);
+    }
+
+    if (!ownerResult.accepted || ownerResult.accepted.length === 0) {
+      const errorMessage = 'Owner email was not accepted by SMTP server.';
+      console.error(errorMessage, ownerResult);
+      return res.status(500).json({ success: false, message: errorMessage, error: JSON.stringify(ownerResult) });
+    }
+
+    if (confirmationError) {
+      return res.status(200).json({
+        success: true,
+        message: 'Message sent successfully. Confirmation email could not be delivered to the visitor.',
+        warning: 'confirmation_email_failed',
+        error: confirmationError.message || String(confirmationError)
+      });
     }
 
     console.log('Both emails sent successfully');
     return res.status(200).json({ success: true, message: 'Email sent successfully' });
   } catch (error) {
     console.error('Error sending email:', error);
-    return res.status(500).json({ success: false, message: 'Failed to send email', error: error.message });
+    return res.status(500).json({ success: false, message: 'Failed to send email', error: error.message || String(error) });
   }
 });
 
