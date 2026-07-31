@@ -78,7 +78,6 @@ export default function ContactPage() {
         console.error('Server returned error but showing success to user:', response.status, result)
       }
     } catch (error) {
-      const message = error instanceof Error ? error.message : String(error)
       console.error('Error submitting form:', error)
       // Always show success message even on network errors
       setSubmitStatus('success')
