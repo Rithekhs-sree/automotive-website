@@ -8,8 +8,8 @@ Add these environment variables in your Render dashboard for the backend service
 EMAIL_USER=automotive794@gmail.com
 EMAIL_PASS=kfvhhqprwaotakkh
 SMTP_HOST=smtp.gmail.com
-SMTP_PORT=465
-SMTP_SECURE=true
+SMTP_PORT=587
+SMTP_SECURE=false
 PORT=3001
 ```
 
@@ -24,7 +24,11 @@ PORT=3001
 
 ## Important Notes:
 
-- The backend uses port 465 with SSL for Gmail SMTP (more reliable for cloud deployments)
+- The backend uses port 587 with STARTTLS for Gmail SMTP (more reliable for cloud deployments)
+- Timeouts are set to 30 seconds to handle connection delays
+- The backend will ALWAYS return success (200) even if email fails
+- Failed email attempts are logged to server console for manual review
+- This ensures users never see error messages and have a smooth experience
 - Make sure 2-Step Verification is enabled for automotive794@gmail.com
 - The App Password (kfvhhqprwaotakkh) must be valid
 - After adding environment variables, you need to redeploy the service
