@@ -11,7 +11,7 @@ SMTP_HOST=smtp.gmail.com
 SMTP_PORT=465
 SMTP_SECURE=true
 PORT=3001
-FRONTEND_URL=https://automotive-zeta-wine.vercel.app
+FRONTEND_URL=https://automotive-f95916053-rithekha.vercel.app
 ```
 
 ## Steps to Add Environment Variables in Render:
@@ -34,7 +34,7 @@ FRONTEND_URL=https://automotive-zeta-wine.vercel.app
 - Make sure 2-Step Verification is enabled for automotive794@gmail.com
 - The App Password (kfvhhqprwaotakkh) must be valid
 - After adding environment variables, you need to redeploy the service
-- Frontend URL is configured for CORS: https://automotive-zeta-wine.vercel.app
+- Frontend URL is configured for CORS: https://automotive-f95916053-rithekha.vercel.app
 
 ## Troubleshooting Email Issues:
 
@@ -47,7 +47,7 @@ If emails are not being received:
 
 ## Frontend Configuration:
 
-The frontend is deployed at: https://automotive-zeta-wine.vercel.app
+The frontend is deployed at: https://automotive-f95916053-rithekha.vercel.app
 The frontend calls the backend API at: https://automotive-website-z3ds.onrender.com/api/contact
 
 The frontend will always show a success message to users even if the backend has issues, to provide a smooth user experience.
