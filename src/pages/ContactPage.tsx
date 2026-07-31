@@ -73,9 +73,10 @@ export default function ContactPage() {
           setSubmitMessage('')
         }, 7000)
       } else {
-        const message = result?.message || result?.error || 'Failed to send your message. Please try again later or email automotive794@gmail.com.'
+        const message = result?.message || result?.error || 'Failed to send your message. Please try again later.'
+        const details = result?.error ? ` (${result.error})` : ''
         setSubmitStatus('error')
-        setSubmitMessage(message)
+        setSubmitMessage(`${message}${details}`)
         console.error('Server returned error for contact endpoint:', response.status, result)
         window.setTimeout(() => {
           setSubmitStatus('idle')

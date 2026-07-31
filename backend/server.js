@@ -50,12 +50,11 @@ console.log('Email transport config:', {
 
 const transporter = nodemailer.createTransport(transporterConfig);
 
-transporter.verify((error) => {
-  if (error) {
-    console.error('SMTP verification failed:', error);
-  } else {
-    console.log('SMTP server is ready to send emails');
-  }
+// Verify transporter once at startup and keep the transport ready
+transporter.verify().then(() => {
+  console.log('SMTP server is ready to send emails');
+}).catch((error) => {
+  console.error('SMTP verification failed:', error);
 });
 
 // Contact form endpoint
@@ -69,9 +68,14 @@ app.post('/api/contact', async (req, res) => {
       throw new Error('Email credentials are missing. Check backend/.env or Render environment variables.');
     }
 
+    const ownerEmail = process.env.EMAIL_USER;
+    if (!ownerEmail) {
+      throw new Error('No owner email configured. Set EMAIL_USER in backend environment.');
+    }
+
     const mailOptions = {
-      from: `"C & S Automotive" <${process.env.EMAIL_USER}>`,
-      to: process.env.EMAIL_USER,
+      from: `"C & S Automotive" <${ownerEmail}>`,
+      to: ownerEmail,
       subject: `New Contact Form Submission from ${fullName}`,
       text: `Name: ${fullName}\nPhone: ${phone}\nEmail: ${email}\nVehicle: ${vehicle || 'Not specified'}\nService Required: ${service || 'Not specified'}\nMessage: ${message}`,
       html: `
@@ -97,7 +101,12 @@ app.post('/api/contact', async (req, res) => {
     return res.status(200).json({ success: true, message: 'Email sent successfully' });
   } catch (error) {
     console.error('Error sending email:', error);
-    return res.status(500).json({ success: false, message: 'Failed to send email', error: error.message || String(error) });
+    return res.status(500).json({
+      success: false,
+      message: 'Failed to send email',
+      error: (error instanceof Error ? error.message : String(error)),
+      raw: JSON.stringify(error, Object.getOwnPropertyNames(error)),
+    });
   }
 });
 
