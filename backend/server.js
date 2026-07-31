@@ -18,15 +18,31 @@ app.use(cors());
 app.use(express.json());
 
 // Email configuration
-const transporter = nodemailer.createTransport({
-  host: 'smtp.gmail.com',
-  port: 587,
-  secure: false,
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS
-  }
-});
+const smtpHost = process.env.SMTP_HOST;
+const smtpPort = Number(process.env.SMTP_PORT || 465);
+const smtpSecure = process.env.SMTP_SECURE ? process.env.SMTP_SECURE === 'true' : smtpPort === 465;
+
+const transporterConfig = smtpHost
+  ? {
+      host: smtpHost,
+      port: smtpPort,
+      secure: smtpSecure,
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+      },
+      tls: { rejectUnauthorized: false },
+    }
+  : {
+      service: 'gmail',
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+      },
+      tls: { rejectUnauthorized: false },
+    };
+
+const transporter = nodemailer.createTransport(transporterConfig);
 
 transporter.verify((error) => {
   if (error) {
@@ -48,9 +64,11 @@ app.post('/api/contact', async (req, res) => {
     }
 
     const mailOptions = {
-      from: process.env.EMAIL_USER,
+      from: `"C & S Automotive" <${process.env.EMAIL_USER}>`,
       to: process.env.EMAIL_USER,
+      replyTo: email,
       subject: `New Contact Form Submission from ${fullName}`,
+      text: `Name: ${fullName}\nPhone: ${phone}\nEmail: ${email}\nVehicle: ${vehicle || 'Not specified'}\nService Required: ${service || 'Not specified'}\nMessage: ${message}`,
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
           <h2 style="color: #1e40af; border-bottom: 2px solid #ef4444; padding-bottom: 10px;">New Contact Form Submission</h2>
@@ -68,35 +86,7 @@ app.post('/api/contact', async (req, res) => {
       `
     };
 
-    const confirmationMailOptions = {
-      from: process.env.EMAIL_USER,
-      to: email,
-      subject: 'Thank you for contacting C & S Automotive',
-      html: `
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
-          <h2 style="color: #1e40af; border-bottom: 2px solid #ef4444; padding-bottom: 10px;">Thank You for Contacting Us</h2>
-          <p>Dear ${fullName},</p>
-          <p>Thank you for reaching out to C & S Automotive Service & Repairs. We have received your message and will get back to you within 24 hours.</p>
-          <div style="background-color: #f3f4f6; padding: 20px; border-radius: 8px; margin: 20px 0;">
-            <p><strong>Your Message:</strong></p>
-            <p style="background-color: white; padding: 15px; border-radius: 4px; border-left: 4px solid #ef4444;">${message}</p>
-          </div>
-          <p>If you have any urgent inquiries, please call us at (02) 1234 5678.</p>
-          <p style="margin-top: 20px;">Best regards,<br>C & S Automotive Team</p>
-          <p style="color: #6b7280; font-size: 12px; margin-top: 20px;">14 Hill Street, Wentworthville, NSW 2145, Australia</p>
-        </div>
-      `
-    };
-
     const ownerResult = await transporter.sendMail(mailOptions);
-    let confirmationError = null;
-
-    try {
-      await transporter.sendMail(confirmationMailOptions);
-    } catch (confirmationFailure) {
-      confirmationError = confirmationFailure;
-      console.error('Confirmation email failed, but owner email was sent:', confirmationFailure);
-    }
 
     if (!ownerResult.accepted || ownerResult.accepted.length === 0) {
       const errorMessage = 'Owner email was not accepted by SMTP server.';
@@ -104,16 +94,7 @@ app.post('/api/contact', async (req, res) => {
       return res.status(500).json({ success: false, message: errorMessage, error: JSON.stringify(ownerResult) });
     }
 
-    if (confirmationError) {
-      return res.status(200).json({
-        success: true,
-        message: 'Message sent successfully. Confirmation email could not be delivered to the visitor.',
-        warning: 'confirmation_email_failed',
-        error: confirmationError.message || String(confirmationError)
-      });
-    }
-
-    console.log('Both emails sent successfully');
+    console.log('Owner email sent successfully', ownerResult);
     return res.status(200).json({ success: true, message: 'Email sent successfully' });
   } catch (error) {
     console.error('Error sending email:', error);

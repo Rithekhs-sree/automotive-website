@@ -87,20 +87,10 @@ export default function ContactPage() {
           setSubmitMessage('')
         }, 7000)
       } else {
-        const message = result?.message || result?.error || 'Failed to send your message. Please try again.'
-        const shouldFallback = response.status >= 500 || response.status === 404
-
-        if (shouldFallback) {
-          setSubmitStatus('error')
-          setSubmitMessage(`${message} Opening email client as fallback...`)
-          console.error('Server returned error for contact endpoint:', response.status, result)
-          openMailClient(data)
-          return
-        }
-
+        const message = result?.message || result?.error || 'Failed to send your message. Please try again later or email automotive794@gmail.com.'
         setSubmitStatus('error')
         setSubmitMessage(message)
-        console.error('Server returned error:', result)
+        console.error('Server returned error for contact endpoint:', response.status, result)
         window.setTimeout(() => {
           setSubmitStatus('idle')
           setSubmitMessage('')
@@ -110,8 +100,7 @@ export default function ContactPage() {
       const message = error instanceof Error ? error.message : String(error)
       console.error('Error submitting form:', error)
       setSubmitStatus('error')
-      setSubmitMessage(`${message} — opening email client as fallback.`)
-      openMailClient(data)
+      setSubmitMessage(message || 'Network error. Please try again later.')
     } finally {
       setIsSubmitting(false)
     }
