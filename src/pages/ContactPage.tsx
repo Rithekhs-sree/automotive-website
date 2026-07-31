@@ -7,7 +7,9 @@ export default function ContactPage() {
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle')
   const [submitMessage, setSubmitMessage] = useState('')
 
-  const apiBaseUrl = import.meta.env.VITE_API_URL ?? (import.meta.env.DEV ? 'http://localhost:3001' : 'https://automotive-website-z3ds.onrender.com')
+  const defaultBackendUrl = 'https://automotive-website-z3ds.onrender.com'
+  const apiBaseUrl = import.meta.env.VITE_API_URL ?? (import.meta.env.DEV ? 'http://localhost:3001' : defaultBackendUrl)
+  const contactEndpoint = `${apiBaseUrl.replace(/\/$/, '')}/api/contact`
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -26,7 +28,8 @@ export default function ContactPage() {
     }
 
     try {
-      const response = await fetch(`${apiBaseUrl}/api/contact`, {
+      console.log('Submitting to endpoint:', contactEndpoint)
+      const response = await fetch(contactEndpoint, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
