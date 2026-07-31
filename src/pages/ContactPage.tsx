@@ -13,6 +13,20 @@ export default function ContactPage() {
       ? 'http://localhost:3001/api/contact'
       : 'https://automotive-website-z3ds.onrender.com/api/contact'
 
+  const ownerEmail = 'automotive794@gmail.com'
+
+  const openMailClient = (data: {
+    fullName: string
+    phone: string
+    email: string
+    vehicle: string
+    service: string
+    message: string
+  }) => {
+    const body = encodeURIComponent(`Name: ${data.fullName}\nPhone: ${data.phone}\nEmail: ${data.email}\nVehicle: ${data.vehicle || 'Not specified'}\nService: ${data.service || 'Not specified'}\nMessage: ${data.message}`)
+    window.location.href = `mailto:${ownerEmail}?subject=${encodeURIComponent('Contact Form Submission from ' + data.fullName)}&body=${body}`
+  }
+
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setIsSubmitting(true)
@@ -65,6 +79,11 @@ export default function ContactPage() {
           setSubmitStatus('idle')
           setSubmitMessage('')
         }, 7000)
+      } else if (response.status === 404) {
+        setSubmitStatus('error')
+        setSubmitMessage('Backend endpoint not found. Opening email client as fallback...')
+        console.error('Server returned 404 for contact endpoint:', result)
+        openMailClient(data)
       } else {
         const message = result?.message || 'Failed to send your message. Please try again.'
         setSubmitStatus('error')
@@ -79,11 +98,8 @@ export default function ContactPage() {
       const message = error instanceof Error ? error.message : String(error)
       console.error('Error submitting form:', error)
       setSubmitStatus('error')
-      setSubmitMessage(message)
-      window.setTimeout(() => {
-        setSubmitStatus('idle')
-        setSubmitMessage('')
-      }, 7000)
+      setSubmitMessage(`${message} — opening email client as fallback.`)
+      openMailClient(data)
     } finally {
       setIsSubmitting(false)
     }
