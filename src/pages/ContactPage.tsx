@@ -7,13 +7,11 @@ export default function ContactPage() {
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle')
   const [submitMessage, setSubmitMessage] = useState('')
 
-  const defaultBackendUrl = 'https://automotive-website-z3ds.onrender.com'
-  const apiBaseUrl = import.meta.env.VITE_API_URL?.trim()
-    ? import.meta.env.VITE_API_URL.trim()
+  const contactEndpoint = import.meta.env.VITE_API_URL?.trim()
+    ? `${import.meta.env.VITE_API_URL.trim().replace(/\/$/, '')}/api/contact`
     : import.meta.env.DEV
-      ? 'http://localhost:3001'
-      : defaultBackendUrl
-  const contactEndpoint = `${apiBaseUrl.replace(/\/$/, '')}/api/contact`
+      ? 'http://localhost:3001/api/contact'
+      : 'https://automotive-website-z3ds.onrender.com/api/contact'
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
