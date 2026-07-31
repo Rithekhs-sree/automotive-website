@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion'
 import { MapPin, Phone, Mail, Clock, Send, Wrench } from 'lucide-react'
-import { useState } from 'react'
+import { type KeyboardEvent, useState } from 'react'
 
 export default function ContactPage() {
   const [isSubmitting, setIsSubmitting] = useState(false)
