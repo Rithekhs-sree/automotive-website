@@ -73,6 +73,8 @@ app.post('/api/contact', async (req, res) => {
       throw new Error('No owner email configured. Set EMAIL_USER in backend environment.');
     }
 
+    console.log('Sending email to owner:', ownerEmail);
+
     const mailOptions = {
       from: `"C & S Automotive" <${ownerEmail}>`,
       to: ownerEmail,
@@ -96,8 +98,8 @@ app.post('/api/contact', async (req, res) => {
     };
 
     const ownerResult = await transporter.sendMail(mailOptions);
-
-    console.log('Owner email send result:', ownerResult);
+    console.log('Owner email sent successfully to:', ownerEmail);
+    console.log('Owner email result:', ownerResult.messageId);
     return res.status(200).json({ success: true, message: 'Email sent successfully' });
   } catch (error) {
     console.error('Error sending email:', error);
