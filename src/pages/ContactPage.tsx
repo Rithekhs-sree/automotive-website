@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion'
 import { MapPin, Phone, Mail, Clock, Send, Wrench } from 'lucide-react'
-import { type KeyboardEvent, useState } from 'react'
+import { type FormEvent, type KeyboardEvent, useState } from 'react'
 
 export default function ContactPage() {
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -8,7 +8,7 @@ export default function ContactPage() {
 
   const apiBaseUrl = import.meta.env.VITE_API_URL || (import.meta.env.DEV ? 'http://localhost:3001' : '')
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setIsSubmitting(true)
     setSubmitStatus('idle')
@@ -55,7 +55,7 @@ export default function ContactPage() {
   }
 
   const handleKeyDown = (
-    e: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>,
+    e: KeyboardEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>,
     isLastField: boolean
   ) => {
     if (e.key === 'Enter' && !e.shiftKey && e.currentTarget.tagName !== 'SELECT') {
