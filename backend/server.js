@@ -123,6 +123,7 @@ console.log('Email transport config:', {
   smtpSecure,
   emailUserConfigured: !!emailUser,
   emailPassConfigured: !!emailPass,
+  emailUserValue: emailUser ? `${emailUser.slice(0, 3)}***@${emailUser.split('@')[1] || 'domain'}` : 'missing',
 });
 
 let transporter = nodemailer.createTransport(transporterConfig);
@@ -207,6 +208,11 @@ app.post('/api/contact', async (req, res) => {
       return res.status(200).json({ success: true, message: 'Message sent successfully' });
     } catch (emailError) {
       console.error('Email send failed:', emailError);
+      console.error('SMTP error details:', {
+        message: emailError?.message,
+        code: emailError?.code,
+        response: emailError?.response,
+      });
       console.log('SUBMISSION LOG:', {
         timestamp: new Date().toISOString(),
         fullName,
