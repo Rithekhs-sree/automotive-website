@@ -260,6 +260,10 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', message: 'Server is running' });
 });
 
+app.get('/health', (req, res) => {
+  res.json({ status: 'ok', message: 'Backend health check' });
+});
+
 // Start server (Railway compatible)
 const HOST = '0.0.0.0';
 
