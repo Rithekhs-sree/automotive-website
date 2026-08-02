@@ -7,9 +7,7 @@ export default function ContactPage() {
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle')
   const [submitMessage, setSubmitMessage] = useState('')
 
-  const contactEndpoint = import.meta.env.DEV
-    ? 'http://localhost:3001/api/contact'
-    : 'https://automotive-website-production.up.railway.app/api/contact'
+  const contactEndpoint = (import.meta.env.VITE_API_URL?.trim() || 'https://automotive-website-production.up.railway.app') + '/api/contact'
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
