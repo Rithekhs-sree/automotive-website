@@ -32,7 +32,7 @@ export default function ContactPage() {
 
     try {
       console.log('Submitting to endpoint:', contactEndpoint)
-      const response = await fetch('https://automotive-website-z3ds.onrender.com/api/contact', {
+      const response = await fetch('https://automotive-website-production.up.railway.app/api/contact', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
