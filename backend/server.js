@@ -244,6 +244,14 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', message: 'Server is running' });
 });
 
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+// Start server (Railway compatible)
+const HOST = '0.0.0.0';
+
+app.listen(PORT, HOST, () => {
+  console.log('=================================');
+  console.log('🚀 C & S Automotive Backend Started');
+  console.log(`🌍 Host: ${HOST}`);
+  console.log(`🚪 Port: ${PORT}`);
+  console.log(`📦 Environment: ${process.env.NODE_ENV || 'development'}`);
+  console.log('=================================');
 });
