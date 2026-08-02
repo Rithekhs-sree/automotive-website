@@ -33,6 +33,8 @@ const staticAllowedOrigins = [
   'https://automotive-rithekha.vercel.app',
   'https://automotive-f95916053-rithekha.vercel.app',
   'https://automotive-zeta-wine.vercel.app',
+  'https://automotive-website-production.up.railway.app',
+  'https://www.automotive-website-production.up.railway.app',
   'http://localhost:5173',
   'http://localhost:3000',
 ];
@@ -42,12 +44,14 @@ const staticAllowedOrigins = [
 //   https://automotive-abc123-rithekha.vercel.app
 //   https://automotive-zeta-wine.vercel.app
 const vercelOriginRegex = /^https:\/\/automotive-[a-z0-9-]*\.vercel\.app$/;
+const railwayOriginRegex = /^https:\/\/[a-z0-9-]+\.up\.railway\.app$/;
 
 function isOriginAllowed(origin) {
   // Allow non-browser clients (curl, health checks, server-to-server) with no Origin header
   if (!origin) return true;
   if (staticAllowedOrigins.includes(origin)) return true;
   if (vercelOriginRegex.test(origin)) return true;
+  if (railwayOriginRegex.test(origin)) return true;
   return false;
 }
 
