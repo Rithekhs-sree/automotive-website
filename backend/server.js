@@ -53,7 +53,7 @@ function isOriginAllowed(origin) {
   return false;
 }
 
-app.use(cors({
+const corsMiddleware = cors({
   origin: function (origin, callback) {
     if (isOriginAllowed(origin)) {
       callback(null, true);
@@ -63,7 +63,12 @@ app.use(cors({
     }
   },
   credentials: true,
-}));
+});
+
+app.use(corsMiddleware);
+app.options('/api/contact', corsMiddleware, (req, res) => {
+  res.sendStatus(204);
+});
 
 // NOTE: No explicit app.options('*') needed. The cors() middleware above
 // (applied via app.use) already handles preflight OPTIONS requests for all

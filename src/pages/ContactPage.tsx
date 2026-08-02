@@ -38,8 +38,19 @@ export default function ContactPage() {
 
       console.log('Response status:', response.status)
       console.log('Response ok:', response.ok)
-      
-      const result = await response.json()
+
+      const responseText = await response.text()
+      let result: { success?: boolean; message?: string } = {}
+
+      if (responseText) {
+        try {
+          result = JSON.parse(responseText)
+        } catch (parseError) {
+          console.warn('Response body was not valid JSON:', parseError)
+          result = { message: responseText }
+        }
+      }
+
       console.log('Response data:', result)
 
       if (response.ok && result.success) {
@@ -57,9 +68,8 @@ export default function ContactPage() {
           setSubmitMessage('')
         }, 7000)
       } else {
-        // Always show success message even if backend fails
-        setSubmitStatus('success')
-        setSubmitMessage('Message sent successfully! We will get back to you soon.')
+        setSubmitStatus('error')
+        setSubmitMessage(result.message || 'Failed to send message. Please try again later.')
         try {
           if (form && typeof form.reset === 'function') {
             form.reset()
@@ -75,9 +85,8 @@ export default function ContactPage() {
       }
     } catch (error) {
       console.error('Error submitting form:', error)
-      // Always show success message even on network errors
-      setSubmitStatus('success')
-      setSubmitMessage('Message sent successfully! We will get back to you soon.')
+      setSubmitStatus('error')
+      setSubmitMessage('Failed to send message. Please try again later.')
       try {
         if (form && typeof form.reset === 'function') {
           form.reset()
