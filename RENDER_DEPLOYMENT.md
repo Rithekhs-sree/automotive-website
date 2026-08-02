@@ -1,53 +1,37 @@
-# Render Deployment Instructions
+# Railway Deployment Notes
 
-## Environment Variables for Render Backend
+## Environment Variables for Railway Backend
 
-Add these environment variables in your Render dashboard for the backend service:
+Add these environment variables in the Railway dashboard for the backend service:
 
 ```
 EMAIL_USER=automotive794@gmail.com
-EMAIL_PASS=kfvhhqprwaotakkh
+EMAIL_PASS=your_app_password
 SMTP_HOST=smtp.gmail.com
 SMTP_PORT=465
 SMTP_SECURE=true
 PORT=3001
-FRONTEND_URL=https://automotive-f95916053-rithekha.vercel.app
+FRONTEND_URL=https://your-vercel-app.vercel.app
 ```
 
-## Steps to Add Environment Variables in Render:
+## Steps to Add Environment Variables in Railway:
 
-1. Go to your Render dashboard
-2. Select your backend service (automotive-website-backend)
-3. Click on "Environment" tab
+1. Go to the Railway dashboard
+2. Select your backend service
+3. Open the Variables tab
 4. Add each variable from the list above
-5. Click "Save Changes"
-6. Deploy again to apply the changes
+5. Save the changes
+6. Redeploy the service
 
 ## Important Notes:
 
 - The backend uses port 465 with SSL for Gmail SMTP
 - Debug logging is enabled to troubleshoot email issues
 - Timeouts are set to 60 seconds to handle connection delays
-- The backend will ALWAYS return success (200) even if email fails
-- Failed email attempts are logged to server console for manual review
-- This ensures users never see error messages and have a smooth experience
-- Make sure 2-Step Verification is enabled for automotive794@gmail.com
-- The App Password (kfvhhqprwaotakkh) must be valid
-- After adding environment variables, you need to redeploy the service
-- Frontend URL is configured for CORS: https://automotive-f95916053-rithekha.vercel.app
-
-## Troubleshooting Email Issues:
-
-If emails are not being received:
-
-1. Check Render logs for SMTP debug output
-2. Verify the App Password is still valid in Google account
-3. Check if Gmail is blocking connections from Render's IP range
-4. Try generating a new App Password from Google account settings
+- Ensure 2-Step Verification is enabled for the Gmail account
+- The App Password must be valid
+- Frontend URL is configured for CORS via the Railway backend
 
 ## Frontend Configuration:
 
-The frontend is deployed at: https://automotive-f95916053-rithekha.vercel.app
-The frontend calls the backend API at: https://automotive-website-z3ds.onrender.com/api/contact
-
-The frontend will always show a success message to users even if the backend has issues, to provide a smooth user experience.
+The frontend is deployed on Vercel and should call the Railway backend endpoint.

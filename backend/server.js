@@ -7,9 +7,7 @@ import path from 'path';
 import dns from 'dns';
 import { fileURLToPath } from 'url';
 
-// Prefer IPv4 globally. Render containers have no working outbound IPv6, so
-// any AAAA (IPv6) address returned for smtp.gmail.com is unreachable and
-// causes ENETUNREACH. This is one of several IPv4 guards below.
+// Prefer IPv4 globally so outbound SMTP connections are more reliable in the deployment environment.
 dns.setDefaultResultOrder('ipv4first');
 
 const __filename = fileURLToPath(import.meta.url);
@@ -87,7 +85,7 @@ const emailPass = (process.env.EMAIL_PASS || '').replace(/\s+/g, '');
 if (!emailUser || !emailPass) {
   console.warn(
     '⚠️  EMAIL_USER and/or EMAIL_PASS are not set. ' +
-    'Emails will NOT be sent. Set them in Render → Environment, ' +
+    'Emails will NOT be sent. Set them in Railway → Variables, ' +
     'and use a Gmail App Password (not your account password).'
   );
 }
@@ -96,7 +94,7 @@ const transporterConfig = {
   host: smtpHost,
   port: smtpPort,
   secure: smtpSecure,
-  // Force IPv4. Render has no working outbound IPv6.
+  // Force IPv4 for more reliable SMTP delivery.
   family: 4,
   // Belt-and-suspenders: a custom resolver that ONLY ever returns IPv4
   // addresses, so nodemailer can never hand an IPv6 address to the socket.
