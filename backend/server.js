@@ -79,8 +79,8 @@ app.use(express.json());
 
 // Email configuration
 const smtpHost = process.env.SMTP_HOST || 'smtp.gmail.com';
-const smtpPort = Number(process.env.SMTP_PORT || 465);
-const smtpSecure = smtpPort === 465; // SSL for 465, STARTTLS for 587
+const smtpPort = Number(process.env.SMTP_PORT || 587);
+const smtpSecure = process.env.SMTP_SECURE === 'true'; // SSL for 465, STARTTLS for 587
 
 // Gmail App Passwords are displayed with spaces (e.g. "abcd efgh ijkl mnop").
 // Pasting them verbatim breaks auth, so strip all whitespace defensively.
