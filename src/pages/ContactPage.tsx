@@ -1,13 +1,16 @@
 import { motion } from 'framer-motion'
 import { MapPin, Phone, Mail, Clock, Send, Wrench } from 'lucide-react'
-import { type FormEvent, type KeyboardEvent, useState } from 'react'
+import {
+  type FormEvent,
+  type KeyboardEvent,
+  useState,
+} from 'react'
+import { ContactFormData, submitContactForm } from '../api'
 
 export default function ContactPage() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle')
   const [submitMessage, setSubmitMessage] = useState('')
-
-  const contactEndpoint = (import.meta.env.VITE_API_URL?.trim() || 'https://automotive-website-production.up.railway.app') + '/api/contact'
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -17,89 +20,40 @@ export default function ContactPage() {
     setSubmitMessage('')
 
     const formData = new FormData(form)
-    const data = {
-      fullName: formData.get('fullName') as string,
-      phone: formData.get('phone') as string,
-      email: formData.get('email') as string,
-      vehicle: formData.get('vehicle') as string,
-      service: formData.get('service') as string,
-      message: formData.get('message') as string,
+    const data: ContactFormData = {
+      fullName: (formData.get('fullName') as string) || '',
+      phone: (formData.get('phone') as string) || '',
+      email: (formData.get('email') as string) || '',
+      vehicle: (formData.get('vehicle') as string) || '',
+      service: (formData.get('service') as string) || '',
+      message: (formData.get('message') as string) || '',
     }
 
     try {
-      console.log('Submitting to endpoint:', contactEndpoint)
-      const response = await fetch(contactEndpoint, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-      })
-
-      console.log('Response status:', response.status)
-      console.log('Response ok:', response.ok)
-
-      const responseText = await response.text()
-      let result: { success?: boolean; message?: string } = {}
-
-      if (responseText) {
-        try {
-          result = JSON.parse(responseText)
-        } catch (parseError) {
-          console.warn('Response body was not valid JSON:', parseError)
-          result = { message: responseText }
-        }
-      }
-
-      console.log('Response data:', result)
-
-      if (response.ok && result.success) {
-        setSubmitStatus('success')
-        setSubmitMessage(result.message || 'Message sent successfully! We will get back to you soon.')
-        try {
-          if (form && typeof form.reset === 'function') {
-            form.reset()
-          }
-        } catch (resetError) {
-          console.warn('Form reset failed:', resetError)
-        }
-        window.setTimeout(() => {
-          setSubmitStatus('idle')
-          setSubmitMessage('')
-        }, 7000)
-      } else {
-        setSubmitStatus('error')
-        setSubmitMessage(result.message || 'Failed to send message. Please try again later.')
-        try {
-          if (form && typeof form.reset === 'function') {
-            form.reset()
-          }
-        } catch (resetError) {
-          console.warn('Form reset failed:', resetError)
-        }
-        window.setTimeout(() => {
-          setSubmitStatus('idle')
-          setSubmitMessage('')
-        }, 7000)
-        console.error('Server returned error but showing success to user:', response.status, result)
-      }
-    } catch (error) {
-      console.error('Error submitting form:', error)
-      setSubmitStatus('error')
-      setSubmitMessage('Failed to send message. Please try again later.')
+      const result = await submitContactForm(data)
+      setSubmitStatus('success')
+      setSubmitMessage(
+        result.message || 'Message sent successfully! We will get back to you soon.',
+      )
       try {
-        if (form && typeof form.reset === 'function') {
-          form.reset()
-        }
+        form.reset()
       } catch (resetError) {
         console.warn('Form reset failed:', resetError)
       }
+    } catch (error) {
+      const message =
+        error instanceof Error
+          ? error.message
+          : 'Failed to send message. Please try again later.'
+      console.error('Error submitting form:', error)
+      setSubmitStatus('error')
+      setSubmitMessage(message)
+    } finally {
+      setIsSubmitting(false)
       window.setTimeout(() => {
         setSubmitStatus('idle')
         setSubmitMessage('')
       }, 7000)
-    } finally {
-      setIsSubmitting(false)
     }
   }
 

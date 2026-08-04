@@ -167,11 +167,7 @@ async function initTransport() {
 initTransport();
 
 // Contact form endpoint
-app.route('/api/contact')
-  .get((req, res) => {
-    res.status(200).json({ message: 'Contact endpoint is working. Submit via POST from the contact form.' });
-  })
-  .post(async (req, res) => {
+app.post('/api/contact', corsMiddleware, async (req, res) => {
   console.log('Received contact form submission:', req.body);
   const { fullName, phone, email, vehicle, service, message } = req.body;
 
@@ -241,9 +237,9 @@ app.route('/api/contact')
       message: 'Message could not be sent right now. Please try again later.',
     });
   }
-  });
+});
 
-app.get('/api/contact', (req, res) => {
+app.get('/api/contact', corsMiddleware, (req, res) => {
   res.status(200).json({ message: 'Contact endpoint is working. Submit via POST from the contact form.' });
 });
 
