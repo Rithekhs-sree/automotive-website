@@ -183,9 +183,9 @@ app.post('/api/contact', corsMiddleware, async (req, res) => {
     console.log('Sending email to owner:', ownerEmail);
 
     const mailOptions = {
-      from: `"C & S Automotive" <${ownerEmail}>`,
+      from: '"Automotive Website" <automotive794@gmail.com>',
       to: ownerEmail,
-      subject: `New Contact Form Submission from ${fullName}`,
+      subject: 'New Contact Form Submission',
       text: `Name: ${fullName}\nPhone: ${phone}\nEmail: ${email}\nVehicle: ${vehicle || 'Not specified'}\nService Required: ${service || 'Not specified'}\nMessage: ${message}`,
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
