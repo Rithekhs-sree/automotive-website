@@ -113,9 +113,9 @@ const transporterConfig = {
     rejectUnauthorized: false,
     servername: smtpHost,
   },
-  connectionTimeout: 60000,
-  greetingTimeout: 60000,
-  socketTimeout: 60000,
+  connectionTimeout: 120000,
+  greetingTimeout: 120000,
+  socketTimeout: 120000,
   debug: true,
   logger: true,
 };
