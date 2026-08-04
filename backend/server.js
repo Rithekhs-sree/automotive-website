@@ -7,8 +7,7 @@ import path from 'path';
 import dns from 'dns';
 import { fileURLToPath } from 'url';
 
-// Prefer IPv4 globally so outbound SMTP connections are more reliable in the deployment environment.
-dns.setDefaultResultOrder('ipv4first');
+// NOTE: no global IPv4 preference set here; rely on system DNS.
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -95,31 +94,6 @@ if (!emailUser || !emailPass) {
   );
 }
 
-const transporterConfig = {
-  host: smtpHost,
-  port: smtpPort,
-  secure: smtpSecure,
-  // Force IPv4 for more reliable SMTP delivery.
-  family: 4,
-  // Belt-and-suspenders: a custom resolver that ONLY ever returns IPv4
-  // addresses, so nodemailer can never hand an IPv6 address to the socket.
-  lookup: (hostname, options, callback) =>
-    dns.lookup(hostname, { ...options, family: 4 }, callback),
-  auth: {
-    user: emailUser,
-    pass: emailPass,
-  },
-  tls: {
-    rejectUnauthorized: false,
-    servername: smtpHost,
-  },
-  connectionTimeout: 15000,
-  greetingTimeout: 15000,
-  socketTimeout: 15000,
-  debug: true,
-  logger: true,
-};
-
 console.log('Email transport config:', {
   smtpHost,
   smtpPort,
@@ -129,7 +103,7 @@ console.log('Email transport config:', {
   emailUserValue: emailUser ? `${emailUser.slice(0, 3)}***@${emailUser.split('@')[1] || 'domain'}` : 'missing',
 });
 
-let transporter = nodemailer.createTransport({
+const transporter = nodemailer.createTransport({
   host: smtpHost,
   port: smtpPort,
   secure: false,
@@ -143,15 +117,17 @@ let transporter = nodemailer.createTransport({
   connectionTimeout: 15000,
   greetingTimeout: 15000,
   socketTimeout: 15000,
+  debug: true,
+  logger: true,
 });
 
-transporter.verify()
-  .then(() => {
-    console.log('SMTP server is ready');
-  })
-  .catch((error) => {
+transporter.verify((error, success) => {
+  if (error) {
     console.error('SMTP verification failed:', error);
-  });
+  } else {
+    console.log('SMTP server is ready');
+  }
+});
 
 // Contact form endpoint
 app.post('/api/contact', corsMiddleware, async (req, res) => {
