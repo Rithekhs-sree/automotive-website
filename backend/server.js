@@ -113,9 +113,9 @@ const transporterConfig = {
     rejectUnauthorized: false,
     servername: smtpHost,
   },
-  connectionTimeout: 120000,
-  greetingTimeout: 120000,
-  socketTimeout: 120000,
+  connectionTimeout: 15000,
+  greetingTimeout: 15000,
+  socketTimeout: 15000,
   debug: true,
   logger: true,
 };
@@ -183,7 +183,7 @@ app.post('/api/contact', corsMiddleware, async (req, res) => {
     console.log('Sending email to owner:', ownerEmail);
 
     const mailOptions = {
-      from: '"Automotive Website" <automotive794@gmail.com>',
+      from: `"Automotive Website" <${emailUser}>`,
       to: ownerEmail,
       subject: 'New Contact Form Submission',
       text: `Name: ${fullName}\nPhone: ${phone}\nEmail: ${email}\nVehicle: ${vehicle || 'Not specified'}\nService Required: ${service || 'Not specified'}\nMessage: ${message}`,
