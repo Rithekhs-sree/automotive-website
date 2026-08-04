@@ -62,8 +62,8 @@ const corsMiddleware = cors({
       callback(new Error('Not allowed by CORS'));
     }
   },
-  credentials: true,
-});
+  credentials: true,  methods: ['GET', 'POST', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],});
 
 app.use(corsMiddleware);
 app.options('/api/contact', corsMiddleware, (req, res) => {

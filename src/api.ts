@@ -20,12 +20,18 @@ async function parseJsonResponse<T>(response: Response): Promise<T> {
   const text = await response.text()
 
   if (!text) {
-    throw new Error(`Empty response body from ${response.url}`)
+    if (!response.ok) {
+      throw new Error(`Request failed with status ${response.status}`)
+    }
+    return {} as T
   }
 
   try {
     return JSON.parse(text) as T
-  } catch (error) {
+  } catch {
+    if (!response.ok) {
+      throw new Error(text)
+    }
     throw new Error(`Unable to parse JSON response from ${response.url}: ${text}`)
   }
 }
