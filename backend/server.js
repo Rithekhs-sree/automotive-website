@@ -129,42 +129,29 @@ console.log('Email transport config:', {
   emailUserValue: emailUser ? `${emailUser.slice(0, 3)}***@${emailUser.split('@')[1] || 'domain'}` : 'missing',
 });
 
-let transporter = nodemailer.createTransport(transporterConfig);
+let transporter = nodemailer.createTransport({
+  host: smtpHost,
+  port: smtpPort,
+  secure: false,
+  auth: {
+    user: emailUser,
+    pass: emailPass,
+  },
+  tls: {
+    rejectUnauthorized: false,
+  },
+  connectionTimeout: 15000,
+  greetingTimeout: 15000,
+  socketTimeout: 15000,
+});
 
-// The most reliable IPv4 guard: resolve smtp.gmail.com to an IPv4 address
-// ourselves and connect to that literal IP. A literal IP means Node performs
-// NO DNS lookup at connect time, so an IPv6 address can never be attempted.
-// We keep tls.servername = the real hostname so the TLS certificate (issued
-// for smtp.gmail.com, not the IP) still validates correctly.
-async function initTransport() {
-  try {
-    const { address } = await dns.promises.lookup(smtpHost, { family: 4 });
-    console.log(`Resolved ${smtpHost} to IPv4 ${address}; using it as SMTP host.`);
-    transporter = nodemailer.createTransport({
-      ...transporterConfig,
-      host: address,            // connect to the IPv4 literal
-      tls: {
-        rejectUnauthorized: false,
-        servername: smtpHost,   // validate cert against the real hostname
-      },
-    });
-  } catch (err) {
-    console.warn(
-      `Could not pre-resolve ${smtpHost} to IPv4 (${err.message}). ` +
-      'Falling back to hostname-based transport with family: 4.'
-    );
-  }
-
-  // Verify transporter once at startup and keep the transport ready
-  try {
-    await transporter.verify();
-    console.log('SMTP server is ready to send emails');
-  } catch (error) {
+transporter.verify()
+  .then(() => {
+    console.log('SMTP server is ready');
+  })
+  .catch((error) => {
     console.error('SMTP verification failed:', error);
-  }
-}
-
-initTransport();
+  });
 
 // Contact form endpoint
 app.post('/api/contact', corsMiddleware, async (req, res) => {
