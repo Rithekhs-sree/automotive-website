@@ -1,5 +1,5 @@
 import { MapPin, Phone, Mail, Clock, ArrowUp } from 'lucide-react'
-import { FaFacebook, FaInstagram, FaTwitter } from 'react-icons/fa'
+import { FaFacebook, FaInstagram } from 'react-icons/fa'
 
 export default function Footer() {
   const scrollToTop = () => {
@@ -60,13 +60,13 @@ export default function Footer() {
                 </div>
               </a>
               
-              <a href="tel:0212345678" className="flex items-center gap-3 group">
+              <a href="tel:0296319288" className="flex items-center gap-3 group">
                 <div className="w-9 h-9 rounded-lg bg-red-500/10 border border-red-500/20 flex items-center justify-center group-hover:border-blue-500/50 group-hover:bg-blue-500/10 transition-all duration-300">
                   <Phone className="w-4 h-4 text-red-500 group-hover:text-blue-400 transition-colors" />
                 </div>
                 <div>
                   <p className="text-white text-sm font-medium group-hover:text-red-400 transition-colors">Call Us</p>
-                  <p className="text-slate-400 text-xs mt-0.5">(02) 1234 5678</p>
+                  <p className="text-slate-400 text-xs mt-0.5">(02) 9631 9288</p>
                 </div>
               </a>
 
@@ -122,25 +122,22 @@ export default function Footer() {
             </p>
             <div className="flex gap-3">
               <a
-                href="#"
+                href="https://www.facebook.com/share/1BGKXURTv3/?mibextid=wwXIfr"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="w-11 h-11 bg-slate-900 border border-red-500/30 rounded-xl flex items-center justify-center text-red-400 hover:text-white hover:bg-red-600 hover:border-red-600 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-red-900/30"
                 aria-label="Facebook"
               >
                 <FaFacebook className="w-5 h-5" />
               </a>
               <a
-                href="#"
+                href="https://www.instagram.com/cnsautorepairsandservices?igsh=MXR6M2hnaDNrcDBjOQ==&utm_source=ig_contact_invite"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="w-11 h-11 bg-slate-900 border border-red-500/30 rounded-xl flex items-center justify-center text-red-400 hover:text-white hover:bg-gradient-to-br hover:from-red-600 hover:to-blue-600 hover:border-transparent transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-red-900/30"
                 aria-label="Instagram"
               >
                 <FaInstagram className="w-5 h-5" />
-              </a>
-              <a
-                href="#"
-                className="w-11 h-11 bg-slate-900 border border-red-500/30 rounded-xl flex items-center justify-center text-red-400 hover:text-white hover:bg-blue-600 hover:border-blue-600 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-blue-900/30"
-                aria-label="Twitter"
-              >
-                <FaTwitter className="w-5 h-5" />
               </a>
             </div>
           </div>

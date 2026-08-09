@@ -184,6 +184,7 @@ export default function ServicesPage() {
   ]
 
   const agentServices = [
+    { icon: Shield, text: "Only agent for QBE provides CTP insurance" },
     { icon: Search, text: "Insurance repair assessments" },
     { icon: Wrench, text: "Accident damage repairs" },
     { icon: FileCheck, text: "Assistance with the insurance repair process" },
