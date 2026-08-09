@@ -70,13 +70,13 @@ export default function Footer() {
                 </div>
               </a>
 
-              <a href="mailto:info@csautomotive.com.au" className="flex items-center gap-3 group">
+              <a href="mailto:automotive794@gmail.com" className="flex items-center gap-3 group">
                 <div className="w-9 h-9 rounded-lg bg-red-500/10 border border-red-500/20 flex items-center justify-center group-hover:border-blue-500/50 group-hover:bg-blue-500/10 transition-all duration-300">
                   <Mail className="w-4 h-4 text-red-500 group-hover:text-blue-400 transition-colors" />
                 </div>
                 <div>
                   <p className="text-white text-sm font-medium group-hover:text-red-400 transition-colors">Email Us</p>
-                  <p className="text-slate-400 text-xs mt-0.5">info@csautomotive.com.au</p>
+                  <p className="text-slate-400 text-xs mt-0.5">automotive794@gmail.com</p>
                 </div>
               </a>
             </div>

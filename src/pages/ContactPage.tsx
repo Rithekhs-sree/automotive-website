@@ -256,8 +256,8 @@ export default function ContactPage() {
               <div className="space-y-4 sm:space-y-6">
                 {[
                   { icon: MapPin, title: "Address", lines: ["14 Hill Street", "Wentworthville", "NSW 2145, Australia"] },
-                  { icon: Phone, title: "Phone", lines: ["(02) 1234 5678", "Mon-Fri: 7:30am - 5:00pm"] },
-                  { icon: Mail, title: "Email", lines: ["info@csautomotive.com.au", "We respond within 24 hours"] },
+                  { icon: Phone, title: "Phone", lines: ["(02) 9631 9288", "Mon-Fri: 7:30am - 5:00pm"] },
+                  { icon: Mail, title: "Email", lines: ["automotive794@gmail.com", "We respond within 24 hours"] },
                   { icon: Clock, title: "Opening Hours", lines: ["Monday - Friday: 7:30am - 5:00pm", "Saturday - Sunday: Closed"] }
                 ].map((item, idx) => (
                   <motion.div 
