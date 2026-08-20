@@ -198,18 +198,18 @@ export default function GalleryPage() {
 
                 const isCenter = position === 0
                 const absPosition = Math.abs(position)
-                
+              
                 // Mobile: show only center image, Desktop: show carousel
                 const isMobile = window.innerWidth < 768
                 const shouldShow = isMobile ? isCenter : true
-                
+              
                 if (!shouldShow) return null
-                
+              
                 // Responsive sizing
                 const cardWidth = isMobile ? '85vw' : '420px'
                 const cardHeight = isMobile ? '50vh' : '600px'
                 const xOffset = isMobile ? 0 : position * 300
-                
+              
                 return (
                   <motion.div
                     key={index}
@@ -241,8 +241,9 @@ export default function GalleryPage() {
                         <img
                           src={imageSrc}
                           alt={`Gallery image ${index + 1}`}
-                          className="w-full h-full object-cover"
+                          className="w-full h-full object-contain bg-slate-900"
                         />
+
                         {isCenter && (
                           <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-transparent to-transparent" />
                         )}
